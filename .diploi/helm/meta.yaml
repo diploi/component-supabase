@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: meta
+  name: meta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: meta
+  template:
+    metadata:
+      labels:
+        app: meta
+    spec:
+      containers:
+        - env:
+            - name: PG_META_DB_HOST
+              value: {{ .Values.envMap.POSTGRES_HOST | quote }}
+            - name: PG_META_DB_NAME
+              value: {{ .Values.envMap.POSTGRES_DB | quote }}
+            - name: PG_META_DB_PASSWORD
+              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+            - name: PG_META_DB_PORT
+              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+            - name: PG_META_DB_USER
+              value: supabase_admin
+            - name: PG_META_PORT
+              value: '8080'
+          image: {{ .Values.images.meta }}
+          name: supabase-meta
+      restartPolicy: Always

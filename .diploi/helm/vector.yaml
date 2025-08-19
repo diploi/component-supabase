@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: vector
+  name: vector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vector
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: vector
+    spec:
+      restartPolicy: Always
+      containers:
+        - args:
+            - --config
+            - /etc/vector/vector.yml
+          env:
+            - name: LOGFLARE_PUBLIC_ACCESS_TOKEN
+              value: {{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN | quote }}
+          image: {{ .Values.images.vector }}
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - --no-verbose
+                - --tries=1
+                - --spider
+                - http://vector.{{ .Values.identifier }}:9001/health
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: supabase-vector
+          volumeMounts:
+            - mountPath: /etc/vector/vector.yml
+              subPath: vector.yml
+              name: vector-config
+              readOnly: true
+      volumes:
+        - name: vector-config
+          hostPath:
+            path: '{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/logs/vector.yml'
+            type: File

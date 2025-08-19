@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: storage
+  name: storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: storage
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: storage
+    spec:
+      restartPolicy: Always
+      containers:
+        - env:
+            - name: ANON_KEY
+              value: {{ .Values.envMap.ANON_KEY | quote }}
+            - name: DATABASE_URL
+              value: postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}
+            - name: ENABLE_IMAGE_TRANSFORMATION
+              value: 'true'
+            - name: FILE_SIZE_LIMIT
+              value: '52428800'
+            - name: FILE_STORAGE_BACKEND_PATH
+              value: /var/lib/storage
+            - name: GLOBAL_S3_BUCKET
+              value: stub
+            - name: IMGPROXY_URL
+              value: http://imgproxy.{{ .Values.identifier }}:5001
+            - name: PGRST_JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: POSTGREST_URL
+              value: {{ .Values.envMap.REST_INTERNAL_URL | quote }}
+            - name: REGION
+              value: stub
+            - name: SERVICE_KEY
+              value: {{ .Values.envMap.SERVICE_ROLE_KEY | quote }}
+            - name: STORAGE_BACKEND
+              value: file
+            - name: TENANT_ID
+              value: stub
+          image: {{ .Values.images.storage }}
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - --no-verbose
+                - --tries=1
+                - --spider
+                - {{ .Values.envMap.STORAGE_INTERNAL_URL | quote }}
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: supabase-storage
+          volumeMounts:
+            - mountPath: /var/lib/storage
+              name: supabase-mount
+      volumes:
+        - name: supabase-mount
+          hostPath:
+            path: {{ $.Values.storage.supabase.hostPath }}

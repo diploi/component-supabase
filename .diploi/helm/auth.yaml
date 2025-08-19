@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: auth
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      restartPolicy: Always
+      containers:
+        - env:
+            - name: API_EXTERNAL_URL
+              value: {{ .Values.envMap.API_EXTERNAL_URL | quote }}
+            - name: GOTRUE_API_HOST
+              value: 0.0.0.0
+            - name: GOTRUE_API_PORT
+              value: '9999'
+            - name: GOTRUE_DB_DATABASE_URL
+              value: postgresql://supabase_auth_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}
+            - name: GOTRUE_DB_DRIVER
+              value: postgres
+            - name: GOTRUE_DISABLE_SIGNUP
+              value: {{ .Values.envMap.DISABLE_SIGNUP | quote }}
+            - name: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
+              value: {{ .Values.envMap.ENABLE_ANONYMOUS_USERS | quote }}
+            - name: GOTRUE_EXTERNAL_EMAIL_ENABLED
+              value: {{ .Values.envMap.ENABLE_EMAIL_SIGNUP | quote }}
+            - name: GOTRUE_EXTERNAL_PHONE_ENABLED
+              value: {{ .Values.envMap.ENABLE_PHONE_SIGNUP | quote }}
+            - name: GOTRUE_JWT_ADMIN_ROLES
+              value: service_role
+            - name: GOTRUE_JWT_AUD
+              value: authenticated
+            - name: GOTRUE_JWT_DEFAULT_GROUP_NAME
+              value: authenticated
+            - name: GOTRUE_JWT_EXP
+              value: {{ .Values.envMap.JWT_EXPIRY | quote }}
+            - name: GOTRUE_JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: GOTRUE_MAILER_AUTOCONFIRM
+              value: {{ .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM | quote }}
+            - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
+              value: {{ .Values.envMap.MAILER_URLPATHS_CONFIRMATION | quote }}
+            - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
+              value: {{ .Values.envMap.MAILER_URLPATHS_EMAIL_CHANGE | quote }}
+            - name: GOTRUE_MAILER_URLPATHS_INVITE
+              value: {{ .Values.envMap.MAILER_URLPATHS_INVITE | quote }}
+            - name: GOTRUE_MAILER_URLPATHS_RECOVERY
+              value: {{ .Values.envMap.MAILER_URLPATHS_RECOVERY | quote }}
+            - name: GOTRUE_SITE_URL
+              value: {{ .Values.envMap.SITE_URL | quote }}
+            - name: GOTRUE_SMS_AUTOCONFIRM
+              value: {{ .Values.envMap.ENABLE_PHONE_AUTOCONFIRM | quote }}
+            - name: GOTRUE_SMTP_ADMIN_EMAIL
+              value: {{ .Values.envMap.SMTP_ADMIN_EMAIL | quote }}
+            - name: GOTRUE_SMTP_HOST
+              value: {{ .Values.envMap.SMTP_HOST | quote }}
+            - name: GOTRUE_SMTP_PASS
+              value: {{ .Values.envMap.SMTP_PASS | quote }}
+            - name: GOTRUE_SMTP_PORT
+              value: {{ .Values.envMap.SMTP_PORT | quote }}
+            - name: GOTRUE_SMTP_SENDER_NAME
+              value: {{ .Values.envMap.SMTP_SENDER_NAME | quote }}
+            - name: GOTRUE_SMTP_USER
+              value: {{ .Values.envMap.SMTP_USER | quote }}
+            - name: GOTRUE_URI_ALLOW_LIST
+              value: {{ .Values.envMap.ADDITIONAL_REDIRECT_URLS | quote }}
+          image: {{ .Values.images.auth }}
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - --no-verbose
+                - --tries=1
+                - --spider
+                - http://localhost:9999/health
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: supabase-auth

@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      restartPolicy: Always
+      containers:
+        - args:
+            - postgres
+            - -c
+            - config_file=/etc/postgresql/postgresql.conf
+            - -c
+            - log_min_messages=fatal
+          env:
+            - name: JWT_EXP
+              value: {{ .Values.envMap.JWT_EXP | quote }}
+            - name: JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: PGDATABASE
+              value: {{ .Values.envMap.PGDATABASE | quote }}
+            - name: PGPASSWORD
+              value: {{ .Values.envMap.PGPASSWORD | quote }}
+            - name: PGPORT
+              value: {{ .Values.envMap.PGPORT | quote }}
+            - name: POSTGRES_DB
+              value: {{ .Values.envMap.POSTGRES_DB | quote }}
+            - name: POSTGRES_HOST
+              value: /var/run/postgresql
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+          image: {{ .Values.images.db }}
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+                - -h
+                - localhost
+            failureThreshold: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: supabase-db
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d/migrations/99-realtime.sql
+              subPath: 99-realtime.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql
+              subPath: 98-webhooks.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /docker-entrypoint-initdb.d/init-scripts/99-roles.sql
+              subPath: 99-roles.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /docker-entrypoint-initdb.d/init-scripts/99-jwt.sql
+              subPath: 99-jwt.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /docker-entrypoint-initdb.d/migrations/97-_supabase.sql
+              subPath: 97-_supabase.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /docker-entrypoint-initdb.d/migrations/99-logs.sql
+              subPath: 99-logs.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /docker-entrypoint-initdb.d/migrations/99-pooler.sql
+              subPath: 99-pooler.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /etc/postgresql-custom
+              name: pgsodium-decryption-key-mount
+            - mountPath: /var/lib/postgresql/data
+              name: postgres
+      volumes:
+        - name: db-config
+          hostPath:
+            path: '{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/db'
+        - name: pgsodium-decryption-key-mount
+          hostPath:
+            path: {{ $.Values.storage.pgsodium-decryption-key.hostPath }}
+        - name: postgres-mount
+          hostPath:
+            path: {{ $.Values.storage.postgres.hostPath }}

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: realtime
+  name: realtime
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: realtime
+  template:
+    metadata:
+      labels:
+        app: realtime
+    spec:
+      containers:
+        - env:
+            - name: API_JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: APP_NAME
+              value: realtime
+            - name: DB_AFTER_CONNECT_QUERY
+              value: SET search_path TO _realtime
+            - name: DB_ENC_KEY
+              value: supabaserealtime
+            - name: DB_HOST
+              value: {{ .Values.envMap.POSTGRES_HOST | quote }}
+            - name: DB_NAME
+              value: {{ .Values.envMap.POSTGRES_DB | quote }}
+            - name: DB_PASSWORD
+              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+            - name: DB_PORT
+              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+            - name: DB_USER
+              value: supabase_admin
+            - name: DNS_NODES
+              value: ''
+            - name: ERL_AFLAGS
+              value: -proto_dist inet_tcp
+            - name: PORT
+              value: '4000'
+            - name: RLIMIT_NOFILE
+              value: '10000'
+            - name: RUN_JANITOR
+              value: 'true'
+            - name: SECRET_KEY_BASE
+              value: {{ .Values.envMap.SECRET_KEY_BASE | quote }}
+            - name: SEED_SELF_HOST
+              value: 'true'
+          image: {{ .Values.images.realtime }}
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -sSfL
+                - --head
+                - -o
+                - /dev/null
+                - -H
+                - 'Authorization: Bearer '
+                - http://localhost:4000/api/tenants/realtime-dev/health
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: realtime-dev.supabase-realtime
+      restartPolicy: Always

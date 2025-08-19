@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: supavisor
+  name: supavisor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supavisor
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: supavisor
+    spec:
+      restartPolicy: Always
+      containers:
+        - args:
+            - /bin/sh
+            - -c
+            - /app/bin/migrate && /app/bin/supavisor eval "$()(cat /etc/pooler/pooler.exs)" && /app/bin/server
+          env:
+            - name: API_JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: CLUSTER_POSTGRES
+              value: 'true'
+            - name: DATABASE_URL
+              value: ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase
+            - name: DB_POOL_SIZE
+              value: {{ .Values.envMap.POOLER_DB_POOL_SIZE | quote }}
+            - name: ERL_AFLAGS
+              value: -proto_dist inet_tcp
+            - name: METRICS_JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: POOLER_DEFAULT_POOL_SIZE
+              value: {{ .Values.envMap.POOLER_DEFAULT_POOL_SIZE | quote }}
+            - name: POOLER_MAX_CLIENT_CONN
+              value: {{ .Values.envMap.POOLER_MAX_CLIENT_CONN | quote }}
+            - name: POOLER_POOL_MODE
+              value: transaction
+            - name: POOLER_TENANT_ID
+              value: {{ .Values.envMap.POOLER_TENANT_ID | quote }}
+            - name: PORT
+              value: '4000'
+            - name: POSTGRES_DB
+              value: {{ .Values.envMap.POSTGRES_DB | quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+            - name: POSTGRES_PORT
+              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+            - name: REGION
+              value: local
+            - name: SECRET_KEY_BASE
+              value: {{ .Values.envMap.SECRET_KEY_BASE | quote }}
+            - name: VAULT_ENC_KEY
+              value: {{ .Values.envMap.VAULT_ENC_KEY | quote }}
+          image: {{ .Values.images.supavisor }}
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -sSfL
+                - --head
+                - -o
+                - /dev/null
+                - http://127.0.0.1:4000/api/health
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: supabase-pooler
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+            - containerPort: 6543
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/pooler/pooler.exs
+              subPath: pooler.exs
+              name: pooler-config
+              readOnly: true
+      volumes:
+        - name: pooler-config
+          hostPath:
+            path: '{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/pooler/pooler.exs'
+            type: File

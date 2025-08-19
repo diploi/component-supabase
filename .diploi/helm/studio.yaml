@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: studio
+  name: studio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: studio
+  template:
+    metadata:
+      labels:
+        app: studio
+    spec:
+      restartPolicy: Always
+      containers:
+        - env:
+            - name: AUTH_JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: DEFAULT_ORGANIZATION_NAME
+              value: {{ .Values.envMap.STUDIO_DEFAULT_ORGANIZATION | quote }}
+            - name: DEFAULT_PROJECT_NAME
+              value: {{ .Values.envMap.STUDIO_DEFAULT_PROJECT | quote }}
+            - name: LOGFLARE_PRIVATE_ACCESS_TOKEN
+              value: {{ .Values.envMap.LOGFLARE_PRIVATE_ACCESS_TOKEN | quote }}
+            - name: LOGFLARE_URL
+              value: {{ .Values.envMap.ANALYTICS_INTERNAL_URL | quote }}
+            - name: NEXT_ANALYTICS_BACKEND_PROVIDER
+              value: postgres
+            - name: NEXT_PUBLIC_ENABLE_LOGS
+              value: 'true'
+            - name: OPENAI_API_KEY
+              value: {{ .Values.envMap.OPENAI_API_KEY | quote }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+            - name: STUDIO_PG_META_URL
+              value: {{ .Values.envMap.META_INTERNAL_URL | quote }}
+            - name: SUPABASE_ANON_KEY
+              value: {{ .Values.envMap.ANON_KEY | quote }}
+            - name: SUPABASE_PUBLIC_URL
+              value: {{ .Values.envMap.SUPABASE_PUBLIC_URL | quote }}
+            - name: SUPABASE_SERVICE_KEY
+              value: {{ .Values.envMap.SERVICE_ROLE_KEY | quote }}
+            - name: SUPABASE_URL
+              value: {{ .Values.envMap.KONG_INTERNAL_URL | quote }}
+          image: {{ .Values.images.studio }}
+          livenessProbe:
+            exec:
+              command:
+                - node
+                - -e
+                - fetch('{{ .Values.envMap.STUDIO_INTERNAL_URL | quote }}/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 10
+          name: supabase-studio

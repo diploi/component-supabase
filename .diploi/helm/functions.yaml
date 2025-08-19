@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: functions
+  name: functions
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: functions
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: functions
+    spec:
+      restartPolicy: Always
+      containers:
+        - args:
+            - start
+            - --main-service
+            - /home/deno/functions/main
+          env:
+            - name: JWT_SECRET
+              value: {{ .Values.envMap.JWT_SECRET | quote }}
+            - name: SUPABASE_ANON_KEY
+              value: {{ .Values.envMap.ANON_KEY | quote }}
+            - name: SUPABASE_DB_URL
+              value: postgresql://{{ .Values.envMap.POSTGRES_USER }}:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}
+            - name: SUPABASE_SERVICE_ROLE_KEY
+              value: {{ .Values.envMap.SERVICE_ROLE_KEY | quote }}
+            - name: SUPABASE_URL
+              value: {{ .Values.envMap.KONG_INTERNAL_URL | quote }}
+            - name: VERIFY_JWT
+              value: {{ .Values.envMap.FUNCTIONS_VERIFY_JWT | quote }}
+          image: {{ .Values.images.functions }}
+          name: supabase-edge-functions
+          volumeMounts:
+            - mountPath: /home/deno/functions
+              name: functions-mount
+      volumes:
+        - name: functions-mount
+          hostPath:
+            path: '{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/functions'

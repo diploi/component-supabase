@@ -1,0 +1,294 @@
+diploiVersion: v1.0
+type: component
+name: Supabase
+description: Official Diploi component for Supabase
+
+hosts:
+  - name: Supabase
+    identifier: app
+    urlFormat: '[label].[default-domain]'
+
+connectionStrings:
+  - name: Internal Address
+    value: http://app.${DIPLOI_NAMESPACE}:8000
+
+parameterGroups:
+  - name: Dashboard
+    identifier: dashboard
+    description: Supabase dashboard configuration
+    parameters:
+      - name: Username
+        identifier: DASHBOARD_USERNAME
+        defaultValue: supabase
+        type: string
+      - name: Password
+        identifier: DASHBOARD_PASSWORD
+        defaultValue: '${generate-random-password:16}'
+        type: secret
+      - name: Default Organization
+        identifier: STUDIO_DEFAULT_ORGANIZATION
+        defaultValue: Default Organization
+        type: string
+      - name: Default Project
+        identifier: STUDIO_DEFAULT_PROJECT
+        defaultValue: Default Project
+        type: string
+  - name: Email
+    identifier: email
+    description: Configure SMTP to send emails
+    toggleable: true
+    defaultValue: false
+    parameters:
+      - name: SMTP Admin Email
+        identifier: SMTP_ADMIN_EMAIL
+        defaultValue: admin@example.com
+        type: string
+      - name: SMTP Host
+        identifier: SMTP_HOST
+        defaultValue: supabase-mail
+        type: string
+      - name: SMTP Port
+        identifier: SMTP_PORT
+        defaultValue: 2500
+        type: integer
+      - name: SMTP User
+        identifier: SMTP_USER
+        defaultValue: fake_mail_user
+        type: string
+      - name: SMTP Pass
+        identifier: SMTP_PASS
+        defaultValue: fake_mail_password
+        type: string
+      - name: SMTP Sender Name
+        identifier: SMTP_SENDER_NAME
+        defaultValue: fake_sender
+        type: string
+      - name: Enable Email Sign Up
+        identifier: ENABLE_EMAIL_SIGNUP
+        defaultValue: false
+        type: boolean
+      - name: Enable Email Automatic Confirmation
+        identifier: ENABLE_EMAIL_AUTOCONFIRM
+        defaultValue: false
+        type: boolean
+  - name: API Keys & Values
+    identifier: admin
+    description: Secure keys & values for accessing and running your Supabase services
+    parameters:
+      - name: JWT Secret
+        identifier: JWT_SECRET
+        defaultValue: '${generate-random-password:32}'
+        type: secret
+      - name: Anon Key
+        description: To generate a new value, see https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
+        identifier: ANON_KEY
+        defaultValue: '${generate-jwt:JWT_SECRET:role=anon&iss=supabase&exp=126144000}'
+        type: string
+      - name: Service Role Key
+        description: To generate a new value, see https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
+        identifier: SERVICE_ROLE_KEY
+        defaultValue: '${generate-jwt:JWT_SECRET:role=service_role&iss=supabase&exp=126144000}'
+        type: secret
+      - name: Vault Encryption Key
+        identifier: VAULT_ENC_KEY
+        defaultValue: '${generate-random-password:32}'
+        type: secret
+      - name: Pooler Tenant ID
+        identifier: POOLER_TENANT_ID
+        defaultValue: '${generate-random-password:8}'
+        type: secret
+      - name: Logflare Public Access Token
+        identifier: LOGFLARE_PUBLIC_ACCESS_TOKEN
+        defaultValue: '${generate-random-password:64}'
+        type: string
+      - name: Logflare Private Access Token
+        identifier: LOGFLARE_PRIVATE_ACCESS_TOKEN
+        defaultValue: '${generate-random-password:64}'
+        type: secret
+  - name: PostgreSQL
+    identifier: postgres
+    description: Superuser & connection configuration
+    parameters:
+      - name: Host
+        identifier: POSTGRES_HOST
+        defaultValue: db.${DIPLOI_NAMESPACE}
+        type: string
+        readOnly: true
+      - name: Port
+        identifier: POSTGRES_PORT
+        defaultValue: 5432
+        type: integer
+      - name: User
+        identifier: POSTGRES_USER
+        defaultValue: postgres
+        type: string
+        contexts: label=postgres,label=app
+      - name: Password
+        identifier: POSTGRES_PASSWORD
+        defaultValue: '${generate-random-password:32}'
+        type: secret
+      - name: Database
+        identifier: POSTGRES_DB
+        defaultValue: supabase
+        type: string
+  - name: OpenAI
+    identifier: openai
+    description: Add your OpenAI API key to enable SQL Editor Assistant
+    toggleable: true
+    defaultValue: false
+    parameters:
+      - name: OpenAI API Key
+        identifier: OPENAI_API_KEY
+        defaultValue: ''
+        type: secret
+  - name: Google Cloud Project
+    identifier: google
+    description: Support Sign in with Google by connecting to a Google Cloud Platform project
+    toggleable: true
+    defaultValue: false
+    parameters:
+      - name: Google Cloud Project ID
+        identifier: GOOGLE_PROJECT_ID
+        defaultValue: ''
+        type: string
+      - name: Google Cloud Project Number
+        identifier: GOOGLE_PROJECT_NUMBER
+        defaultValue: ''
+        type: string
+  - name: Internal Addresses
+    identifier: internal
+    description: Internal endpoints for different Supabase services
+    parameters:
+      - name: Auth
+        identifier: AUTH_INTERNAL_URL
+        defaultValue: http://auth.${DIPLOI_NAMESPACE}:9999
+        type: string
+        readOnly: true
+      - name: REST
+        identifier: REST_INTERNAL_URL
+        defaultValue: http://rest.${DIPLOI_NAMESPACE}:3000
+        type: string
+        readOnly: true
+      - name: Realtime
+        identifier: REALTIME_INTERNAL_URL
+        defaultValue: ws://realtime.${DIPLOI_NAMESPACE}:4000
+        type: string
+        readOnly: true
+      - name: Storage
+        identifier: STORAGE_INTERNAL_URL
+        defaultValue: http://storage.${DIPLOI_NAMESPACE}:5000
+        type: string
+        readOnly: true
+      - name: Functions
+        identifier: FUNCTIONS_INTERNAL_URL
+        defaultValue: http://functions.${DIPLOI_NAMESPACE}:9000
+        type: string
+        readOnly: true
+      - name: Analytics
+        identifier: ANALYTICS_INTERNAL_URL
+        defaultValue: http://analytics.${DIPLOI_NAMESPACE}:4000
+        type: string
+        readOnly: true
+      - name: Meta
+        identifier: META_INTERNAL_URL
+        defaultValue: http://meta.${DIPLOI_NAMESPACE}:8080
+        type: string
+        readOnly: true
+      - name: Studio
+        identifier: STUDIO_INTERNAL_URL
+        defaultValue: http://studio.${DIPLOI_NAMESPACE}:3000
+        type: string
+        readOnly: true
+      - name: Kong
+        identifier: KONG_INTERNAL_URL
+        defaultValue: http://kong.${DIPLOI_NAMESPACE}:8000
+        type: string
+        readOnly: true
+
+environmentVariables:
+  - identifier: SITE_URL
+    defaultValue: ''
+  - identifier: DISABLE_SIGNUP
+    defaultValue: false
+  - identifier: ENABLE_ANONYMOUS_USERS
+    defaultValue: false
+  - identifier: ENABLE_PHONE_SIGNUP
+    defaultValue: true
+  - identifier: ENABLE_PHONE_AUTOCONFIRM
+    defaultValue: true
+  - identifier: FUNCTIONS_VERIFY_JWT
+    defaultValue: false
+
+images:
+  - identifier: studio
+    image: supabase/studio:2025.06.30-sha-6f5982d
+  - identifier: kong
+    image: kong:2.8.1
+  - identifier: auth
+    image: supabase/gotrue:v2.177.0
+  - identifier: rest
+    image: postgrest/postgrest:v12.2.12
+  - identifier: realtime
+    image: supabase/realtime:v2.34.47
+  - identifier: storage
+    image: supabase/storage-api:v1.25.7
+  - identifier: imgproxy
+    image: darthsim/imgproxy:v3.8.0
+  - identifier: meta
+    image: supabase/postgres-meta:v0.91.0
+  - identifier: functions
+    image: supabase/edge-runtime:v1.67.4
+  - identifier: analytics
+    image: supabase/logflare:1.14.2
+  - identifier: db
+    image: supabase/postgres:15.8.1.060
+  - identifier: vector
+    image: timberio/vector:0.28.1-alpine
+  - identifier: supavisor
+    image: supabase/supavisor:2.5.7
+
+logs:
+  - name: Supabase Studio Log
+    type: log
+    labelSelector: app=studio
+  - name: Supabase Kong Log
+    type: log
+    labelSelector: app=kong
+  - name: Supabase REST Log
+    type: log
+    labelSelector: app=rest
+  - name: Supabase Realtime Log
+    type: log
+    labelSelector: app=realtime
+  - name: Supabase Storage Log
+    type: log
+    labelSelector: app=storage
+  - name: Supabase Image Proxy Log
+    type: log
+    labelSelector: app=imgproxy
+  - name: Supabase Meta Log
+    type: log
+    labelSelector: app=meta
+  - name: Supabase Functions Log
+    type: log
+    labelSelector: app=functions
+  - name: Supabase Analytics Log
+    type: log
+    labelSelector: app=analytics
+  - name: Supabase PostgreSQL Log
+    type: log
+    labelSelector: app=db
+  - name: Supabase Vector Log
+    type: log
+    labelSelector: app=vector
+  - name: Supabase Supavisor Log
+    type: log
+    labelSelector: app=supavisor
+
+storage:
+  - identifier: supabase
+    sizeMiB: 8192
+  - identifier: postgres
+    sizeMiB: 8192
+  - identifier: pgsodium-decryption-key
+    sizeMiB: 512
