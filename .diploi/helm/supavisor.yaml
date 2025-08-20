@@ -28,7 +28,7 @@ spec:
             - name: CLUSTER_POSTGRES
               value: 'true'
             - name: DATABASE_URL
-              value: ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase
+              value: 'ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase'
             - name: DB_POOL_SIZE
               value: {{ .Values.envMap.POOLER_DB_POOL_SIZE | quote }}
             - name: ERL_AFLAGS

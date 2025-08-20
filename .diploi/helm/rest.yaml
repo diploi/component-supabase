@@ -28,7 +28,7 @@ spec:
             - name: PGRST_DB_SCHEMAS
               value: {{ .Values.envMap.PGRST_DB_SCHEMAS | quote }}
             - name: PGRST_DB_URI
-              value: postgres://authenticator:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}
+              value: 'postgres://authenticator:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}'
             - name: PGRST_DB_USE_LEGACY_GUCS
               value: 'false'
             - name: PGRST_JWT_SECRET
