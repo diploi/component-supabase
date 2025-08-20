@@ -86,16 +86,16 @@ spec:
               name: db-config
               readOnly: true
             - mountPath: /etc/postgresql-custom
-              name: pgsodium-decryption-key-mount
+              name: pgsodium-mount
             - mountPath: /var/lib/postgresql/data
               name: postgres
       volumes:
         - name: db-config
           hostPath:
             path: '{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/db'
-        - name: pgsodium-decryption-key-mount
+        - name: pgsodium-mount
           hostPath:
-            path: {{ $.Values.storage.pgsodium-decryption-key.hostPath }}
+            path: {{ $.Values.storage.pgsodium.hostPath }}
         - name: postgres-mount
           hostPath:
             path: {{ $.Values.storage.postgres.hostPath }}
