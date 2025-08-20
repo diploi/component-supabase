@@ -24,7 +24,7 @@ spec:
             - name: DB_PASSWORD
               value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
             - name: DB_PORT
-              value: {{ .Values.envMap.POSTGRES_PORT }}
+              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
             - name: DB_SCHEMA
               value: _analytics
             - name: DB_USERNAME
