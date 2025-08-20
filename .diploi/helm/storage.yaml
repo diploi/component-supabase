@@ -24,15 +24,15 @@ spec:
             - name: DATABASE_URL
               value: "postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}"
             - name: ENABLE_IMAGE_TRANSFORMATION
-              value: 'true'
+              value: true
             - name: FILE_SIZE_LIMIT
-              value: '52428800'
+              value: 52428800
             - name: FILE_STORAGE_BACKEND_PATH
               value: /var/lib/storage
             - name: GLOBAL_S3_BUCKET
               value: stub
             - name: IMGPROXY_URL
-              value: http://imgproxy.{{ .Values.identifier }}:5001
+              value: "http://imgproxy.{{ .Values.identifier }}:5001"
             - name: PGRST_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET | quote }}
             - name: POSTGREST_URL

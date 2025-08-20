@@ -30,7 +30,7 @@ spec:
             - name: NEXT_ANALYTICS_BACKEND_PROVIDER
               value: postgres
             - name: NEXT_PUBLIC_ENABLE_LOGS
-              value: 'true'
+              value: true
             - name: OPENAI_API_KEY
               value: {{ .Values.envMap.OPENAI_API_KEY | quote }}
             - name: POSTGRES_PASSWORD
@@ -51,7 +51,7 @@ spec:
               command:
                 - node
                 - -e
-                - fetch('{{ .Values.envMap.STUDIO_INTERNAL_URL | quote }}/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})
+                - "fetch('{{ .Values.envMap.STUDIO_INTERNAL_URL | quote }}/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})"
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 10

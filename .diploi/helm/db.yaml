@@ -92,7 +92,7 @@ spec:
       volumes:
         - name: db-config
           hostPath:
-            path: '{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/db'
+            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/db"
         - name: pgsodium-mount
           hostPath:
             path: {{ $.Values.storage.pgsodium.hostPath }}

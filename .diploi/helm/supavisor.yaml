@@ -26,31 +26,31 @@ spec:
             - name: API_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET | quote }}
             - name: CLUSTER_POSTGRES
-              value: 'true'
+              value: true
             - name: DATABASE_URL
-              value: 'ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase'
+              value: "ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase"
             - name: DB_POOL_SIZE
-              value: {{ .Values.envMap.POOLER_DB_POOL_SIZE | quote }}
+              value: {{ .Values.envMap.POOLER_DB_POOL_SIZE }}
             - name: ERL_AFLAGS
               value: -proto_dist inet_tcp
             - name: METRICS_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET | quote }}
             - name: POOLER_DEFAULT_POOL_SIZE
-              value: {{ .Values.envMap.POOLER_DEFAULT_POOL_SIZE | quote }}
+              value: {{ .Values.envMap.POOLER_DEFAULT_POOL_SIZE }}
             - name: POOLER_MAX_CLIENT_CONN
-              value: {{ .Values.envMap.POOLER_MAX_CLIENT_CONN | quote }}
+              value: {{ .Values.envMap.POOLER_MAX_CLIENT_CONN }}
             - name: POOLER_POOL_MODE
               value: transaction
             - name: POOLER_TENANT_ID
               value: {{ .Values.envMap.POOLER_TENANT_ID | quote }}
             - name: PORT
-              value: '4000'
+              value: 4000
             - name: POSTGRES_DB
               value: {{ .Values.envMap.POSTGRES_DB | quote }}
             - name: POSTGRES_PASSWORD
               value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
             - name: POSTGRES_PORT
-              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+              value: {{ .Values.envMap.POSTGRES_PORT }}
             - name: REGION
               value: local
             - name: SECRET_KEY_BASE
@@ -84,5 +84,5 @@ spec:
       volumes:
         - name: pooler-config
           hostPath:
-            path: '{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/pooler/pooler.exs'
+            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/pooler/pooler.exs"
             type: File

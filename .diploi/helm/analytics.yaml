@@ -46,7 +46,7 @@ spec:
             - name: POSTGRES_BACKEND_SCHEMA
               value: _analytics
             - name: POSTGRES_BACKEND_URL
-              value: 'postgresql://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase'
+              value: "postgresql://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase"
           image: {{ .Values.images.analytics }}
           livenessProbe:
             exec:
