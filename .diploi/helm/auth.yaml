@@ -28,13 +28,13 @@ spec:
             - name: GOTRUE_DB_DRIVER
               value: postgres
             - name: GOTRUE_DISABLE_SIGNUP
-              value: {{ .Values.envMap.DISABLE_SIGNUP }}
+              value: {{ .Values.envMap.DISABLE_SIGNUP | quote }}
             - name: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
-              value: {{ .Values.envMap.ENABLE_ANONYMOUS_USERS }}
+              value: {{ .Values.envMap.ENABLE_ANONYMOUS_USERS | quote }}
             - name: GOTRUE_EXTERNAL_EMAIL_ENABLED
-              value: {{ .Values.envMap.ENABLE_EMAIL_SIGNUP }}
+              value: {{ .Values.envMap.ENABLE_EMAIL_SIGNUP | quote }}
             - name: GOTRUE_EXTERNAL_PHONE_ENABLED
-              value: {{ .Values.envMap.ENABLE_PHONE_SIGNUP }}
+              value: {{ .Values.envMap.ENABLE_PHONE_SIGNUP | quote }}
             - name: GOTRUE_JWT_ADMIN_ROLES
               value: service_role
             - name: GOTRUE_JWT_AUD
@@ -46,7 +46,7 @@ spec:
             - name: GOTRUE_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET | quote }}
             - name: GOTRUE_MAILER_AUTOCONFIRM
-              value: {{ .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM }}
+              value: {{ .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM | quote }}
             - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
               value: {{ .Values.envMap.MAILER_URLPATHS_CONFIRMATION | quote }}
             - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
@@ -58,7 +58,7 @@ spec:
             - name: GOTRUE_SITE_URL
               value: {{ .Values.envMap.SITE_URL | quote }}
             - name: GOTRUE_SMS_AUTOCONFIRM
-              value: {{ .Values.envMap.ENABLE_PHONE_AUTOCONFIRM }}
+              value: {{ .Values.envMap.ENABLE_PHONE_AUTOCONFIRM | quote }}
             - name: GOTRUE_SMTP_ADMIN_EMAIL
               value: {{ .Values.envMap.SMTP_ADMIN_EMAIL | quote }}
             - name: GOTRUE_SMTP_HOST

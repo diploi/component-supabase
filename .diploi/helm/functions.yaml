@@ -34,7 +34,7 @@ spec:
             - name: SUPABASE_URL
               value: {{ .Values.envMap.KONG_INTERNAL_URL | quote }}
             - name: VERIFY_JWT
-              value: {{ .Values.envMap.FUNCTIONS_VERIFY_JWT }}
+              value: {{ .Values.envMap.FUNCTIONS_VERIFY_JWT | quote }}
           image: {{ .Values.images.functions }}
           name: supabase-edge-functions
           volumeMounts:
