@@ -247,44 +247,6 @@ images:
   - identifier: supavisor
     image: supabase/supavisor:2.5.7
 
-logs:
-  - name: Supabase Studio Log
-    type: log
-    labelSelector: app=studio
-  - name: Supabase Kong Log
-    type: log
-    labelSelector: app=kong
-  - name: Supabase REST Log
-    type: log
-    labelSelector: app=rest
-  - name: Supabase Realtime Log
-    type: log
-    labelSelector: app=realtime
-  - name: Supabase Storage Log
-    type: log
-    labelSelector: app=storage
-  - name: Supabase Image Proxy Log
-    type: log
-    labelSelector: app=imgproxy
-  - name: Supabase Meta Log
-    type: log
-    labelSelector: app=meta
-  - name: Supabase Functions Log
-    type: log
-    labelSelector: app=functions
-  - name: Supabase Analytics Log
-    type: log
-    labelSelector: app=analytics
-  - name: Supabase PostgreSQL Log
-    type: log
-    labelSelector: app=db
-  - name: Supabase Vector Log
-    type: log
-    labelSelector: app=vector
-  - name: Supabase Supavisor Log
-    type: log
-    labelSelector: app=supavisor
-
 storage:
   - identifier: supabase
     sizeMiB: 8192
