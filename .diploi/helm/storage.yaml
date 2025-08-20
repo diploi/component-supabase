@@ -22,7 +22,7 @@ spec:
             - name: ANON_KEY
               value: {{ .Values.envMap.ANON_KEY | quote }}
             - name: DATABASE_URL
-              value: 'postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}'
+              value: "postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}"
             - name: ENABLE_IMAGE_TRANSFORMATION
               value: 'true'
             - name: FILE_SIZE_LIMIT

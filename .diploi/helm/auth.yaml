@@ -20,21 +20,21 @@ spec:
             - name: API_EXTERNAL_URL
               value: {{ .Values.envMap.API_EXTERNAL_URL | quote }}
             - name: GOTRUE_API_HOST
-              value: 0.0.0.0
+              value: '0.0.0.0'
             - name: GOTRUE_API_PORT
-              value: '9999'
+              value: 9999
             - name: GOTRUE_DB_DATABASE_URL
               value: 'postgresql://supabase_auth_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}'
             - name: GOTRUE_DB_DRIVER
               value: postgres
             - name: GOTRUE_DISABLE_SIGNUP
-              value: {{ .Values.envMap.DISABLE_SIGNUP | quote }}
+              value: {{ .Values.envMap.DISABLE_SIGNUP }}
             - name: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
-              value: {{ .Values.envMap.ENABLE_ANONYMOUS_USERS | quote }}
+              value: {{ .Values.envMap.ENABLE_ANONYMOUS_USERS }}
             - name: GOTRUE_EXTERNAL_EMAIL_ENABLED
-              value: {{ .Values.envMap.ENABLE_EMAIL_SIGNUP | quote }}
+              value: {{ .Values.envMap.ENABLE_EMAIL_SIGNUP }}
             - name: GOTRUE_EXTERNAL_PHONE_ENABLED
-              value: {{ .Values.envMap.ENABLE_PHONE_SIGNUP | quote }}
+              value: {{ .Values.envMap.ENABLE_PHONE_SIGNUP }}
             - name: GOTRUE_JWT_ADMIN_ROLES
               value: service_role
             - name: GOTRUE_JWT_AUD
@@ -46,7 +46,7 @@ spec:
             - name: GOTRUE_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET | quote }}
             - name: GOTRUE_MAILER_AUTOCONFIRM
-              value: {{ .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM | quote }}
+              value: {{ .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM }}
             - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
               value: {{ .Values.envMap.MAILER_URLPATHS_CONFIRMATION | quote }}
             - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
@@ -58,7 +58,7 @@ spec:
             - name: GOTRUE_SITE_URL
               value: {{ .Values.envMap.SITE_URL | quote }}
             - name: GOTRUE_SMS_AUTOCONFIRM
-              value: {{ .Values.envMap.ENABLE_PHONE_AUTOCONFIRM | quote }}
+              value: {{ .Values.envMap.ENABLE_PHONE_AUTOCONFIRM }}
             - name: GOTRUE_SMTP_ADMIN_EMAIL
               value: {{ .Values.envMap.SMTP_ADMIN_EMAIL | quote }}
             - name: GOTRUE_SMTP_HOST
