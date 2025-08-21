@@ -18,7 +18,7 @@ spec:
       containers:
         - env:
             - name: API_EXTERNAL_URL
-              value: {{ .Values.envMap.API_EXTERNAL_URL.value | quote }}
+              value: "https://{{ .Values.hosts.app }}"
             - name: GOTRUE_API_HOST
               value: '0.0.0.0'
             - name: GOTRUE_API_PORT
