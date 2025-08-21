@@ -17,11 +17,19 @@ spec:
         app: db
     spec:
       restartPolicy: Always
+
+      # Allow /etc/postgresql-custom for the postgres user
+      initContainers:
+      - name: fix-permissions
+        image: busybox
+        command: ["sh", "-c", "mkdir -p /etc/postgresql-custom && chmod 0770 /etc/postgresql-custom && chown 999:999 /etc/postgresql-custom"]
+        volumeMounts:
+          - name: pgsodium-mount
+            mountPath: /etc/postgresql-custom
+
       containers:
         - args:
             - postgres
-            - -c
-            - config_file=/etc/postgresql/postgresql.conf
             - -c
             - log_min_messages=fatal
           env:
