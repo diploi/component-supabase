@@ -46,4 +46,11 @@ spec:
             - name: SUPABASE_URL
               value: {{ .Values.envMap.KONG_INTERNAL_URL | quote }}
           image: {{ .Values.images.studio }}
+          livenessProbe:
+            httpGet:
+              path: /api/platform/profile
+              port: 3000
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 10
           name: supabase-studio
