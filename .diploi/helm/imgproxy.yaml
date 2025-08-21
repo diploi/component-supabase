@@ -18,28 +18,28 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        env:
-          - name: IMGPROXY_BIND
-            value: ':5001'
-          - name: IMGPROXY_LOCAL_FILESYSTEM_ROOT
-            value: '/'
-          - name: IMGPROXY_USE_ETAG
-            value: 'true'
-          - name: IMGPROXY_ENABLE_WEBP_DETECTION
-            value: {{ .Values.envMap.IMGPROXY_ENABLE_WEBP_DETECTION | quote }}
-        image: {{ .Values.images.imgproxy }}
-        livenessProbe:
-          exec:
-            command:
-              - imgproxy
-              - health
-          failureThreshold: 3
-          periodSeconds: 5
-          timeoutSeconds: 5
-        name: supabase-imgproxy
-        volumeMounts:
-          - mountPath: /var/lib/storage
-            name: supabase-mount
+        - env:
+            - name: IMGPROXY_BIND
+              value: ':5001'
+            - name: IMGPROXY_LOCAL_FILESYSTEM_ROOT
+              value: '/'
+            - name: IMGPROXY_USE_ETAG
+              value: 'true'
+            - name: IMGPROXY_ENABLE_WEBP_DETECTION
+              value: {{ .Values.envMap.IMGPROXY_ENABLE_WEBP_DETECTION | quote }}
+          image: {{ .Values.images.imgproxy }}
+          livenessProbe:
+            exec:
+              command:
+                - imgproxy
+                - health
+            failureThreshold: 3
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: supabase-imgproxy
+          volumeMounts:
+            - mountPath: /var/lib/storage
+              name: supabase-mount
       volumes:
         - name: supabase-mount
           hostPath:
