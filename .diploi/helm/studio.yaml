@@ -5,7 +5,7 @@ metadata:
     app: studio
   name: studio
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: studio
@@ -15,6 +15,13 @@ spec:
         app: studio
     spec:
       restartPolicy: Always
+      initContainers:
+        - name: wait-for-analytics
+          image: busybox
+          command:
+            - sh
+            - -c
+            - until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
       containers:
         - env:
             - name: AUTH_JWT_SECRET
@@ -54,3 +61,5 @@ spec:
           #   periodSeconds: 5
           #   timeoutSeconds: 10
           name: supabase-studio
+          ports:
+            - containerPort: 3000
