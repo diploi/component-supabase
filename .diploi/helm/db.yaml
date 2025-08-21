@@ -26,7 +26,7 @@ spec:
             - log_min_messages=fatal
           env:
             - name: JWT_EXP
-              value: {{ .Values.envMap.JWT_EXP.value | quote }}
+              value: {{ .Values.envMap.JWT_EXPIRY.value | quote }}
             - name: JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: PGDATABASE
