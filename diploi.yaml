@@ -224,6 +224,8 @@ environmentVariables:
     defaultValue: false
   - identifier: JWT_EXPIRY
     defaultValue: 3600
+  - identifier: PGRST_DB_SCHEMAS
+    defaultValue: public,storage,graphql_public
 
 images:
   - identifier: studio
