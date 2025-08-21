@@ -48,13 +48,13 @@ spec:
             - name: GOTRUE_MAILER_AUTOCONFIRM
               value: {{ .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM.value | quote }}
             - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
-              value: {{ .Values.envMap.MAILER_URLPATHS_CONFIRMATION.value | quote }}
+              value: /auth/v1/verify
             - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
-              value: {{ .Values.envMap.MAILER_URLPATHS_EMAIL_CHANGE.value | quote }}
+              value: /auth/v1/verify
             - name: GOTRUE_MAILER_URLPATHS_INVITE
-              value: {{ .Values.envMap.MAILER_URLPATHS_INVITE.value | quote }}
+              value: /auth/v1/verify
             - name: GOTRUE_MAILER_URLPATHS_RECOVERY
-              value: {{ .Values.envMap.MAILER_URLPATHS_RECOVERY.value | quote }}
+              value: /auth/v1/verify
             - name: GOTRUE_SITE_URL
               value: {{ .Values.envMap.SITE_URL.value | quote }}
             - name: GOTRUE_SMS_AUTOCONFIRM
