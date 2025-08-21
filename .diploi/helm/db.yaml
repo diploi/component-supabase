@@ -88,7 +88,7 @@ spec:
             - mountPath: /etc/postgresql-custom
               name: pgsodium-mount
             - mountPath: /var/lib/postgresql/data
-              name: postgres
+              name: postgres-mount
       volumes:
         - name: db-config
           hostPath:
