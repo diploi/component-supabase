@@ -30,11 +30,11 @@ spec:
             - name: JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: PGDATABASE
-              value: {{ .Values.envMap.PGDATABASE.value | quote }}
+              value: {{ .Values.envMap.POSTGRES_DB.value | quote }}
             - name: PGPASSWORD
-              value: {{ .Values.envMap.PGPASSWORD.value | quote }}
+              value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: PGPORT
-              value: {{ .Values.envMap.PGPORT.value | quote }}
+              value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
             - name: POSTGRES_DB
               value: {{ .Values.envMap.POSTGRES_DB.value | quote }}
             - name: POSTGRES_HOST
