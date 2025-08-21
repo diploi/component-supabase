@@ -5,7 +5,7 @@ metadata:
     app: storage
   name: storage
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: storage
@@ -17,6 +17,16 @@ spec:
         app: storage
     spec:
       restartPolicy: Always
+      initContainers:
+        - name: wait-for-db-rest-and-imgproxy
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
+              until nc -z rest 3000; do echo waiting for rest; sleep 2; done;
+              until nc -z imgproxy 5001; do echo waiting for imgproxy; sleep 2; done;
       containers:
         - env:
             - name: ANON_KEY
@@ -58,6 +68,8 @@ spec:
           #   periodSeconds: 5
           #   timeoutSeconds: 5
           name: supabase-storage
+          ports:
+            - containerPort: 5000
           volumeMounts:
             - mountPath: /var/lib/storage
               name: supabase-mount
