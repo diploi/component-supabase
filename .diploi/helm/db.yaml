@@ -26,23 +26,23 @@ spec:
             - log_min_messages=fatal
           env:
             - name: JWT_EXP
-              value: {{ .Values.envMap.JWT_EXP | quote }}
+              value: {{ .Values.envMap.JWT_EXP.value | quote }}
             - name: JWT_SECRET
-              value: {{ .Values.envMap.JWT_SECRET | quote }}
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: PGDATABASE
-              value: {{ .Values.envMap.PGDATABASE | quote }}
+              value: {{ .Values.envMap.PGDATABASE.value | quote }}
             - name: PGPASSWORD
-              value: {{ .Values.envMap.PGPASSWORD | quote }}
+              value: {{ .Values.envMap.PGPASSWORD.value | quote }}
             - name: PGPORT
-              value: {{ .Values.envMap.PGPORT | quote }}
+              value: {{ .Values.envMap.PGPORT.value | quote }}
             - name: POSTGRES_DB
-              value: {{ .Values.envMap.POSTGRES_DB | quote }}
+              value: {{ .Values.envMap.POSTGRES_DB.value | quote }}
             - name: POSTGRES_HOST
               value: /var/run/postgresql
             - name: POSTGRES_PASSWORD
-              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+              value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: POSTGRES_PORT
-              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+              value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
           image: {{ .Values.images.db }}
           livenessProbe:
             exec:

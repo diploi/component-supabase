@@ -20,9 +20,9 @@ spec:
       containers:
         - env:
             - name: ANON_KEY
-              value: {{ .Values.envMap.ANON_KEY | quote }}
+              value: {{ .Values.envMap.ANON_KEY.value | quote }}
             - name: DATABASE_URL
-              value: "postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}"
+              value: "postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
             - name: ENABLE_IMAGE_TRANSFORMATION
               value: 'true'
             - name: FILE_SIZE_LIMIT
@@ -34,13 +34,13 @@ spec:
             - name: IMGPROXY_URL
               value: "http://imgproxy.{{ .Values.identifier }}:5001"
             - name: PGRST_JWT_SECRET
-              value: {{ .Values.envMap.JWT_SECRET | quote }}
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: POSTGREST_URL
-              value: {{ .Values.envMap.REST_INTERNAL_URL | quote }}
+              value: {{ .Values.envMap.REST_INTERNAL_URL.value | quote }}
             - name: REGION
               value: stub
             - name: SERVICE_KEY
-              value: {{ .Values.envMap.SERVICE_ROLE_KEY | quote }}
+              value: {{ .Values.envMap.SERVICE_ROLE_KEY.value | quote }}
             - name: STORAGE_BACKEND
               value: file
             - name: TENANT_ID
@@ -53,7 +53,7 @@ spec:
                 - --no-verbose
                 - --tries=1
                 - --spider
-                - {{ .Values.envMap.STORAGE_INTERNAL_URL | quote }}
+                - {{ .Values.envMap.STORAGE_INTERNAL_URL.value | quote }}
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 5

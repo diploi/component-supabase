@@ -26,7 +26,7 @@ spec:
             - name: IMGPROXY_USE_ETAG
               value: 'true'
             - name: IMGPROXY_ENABLE_WEBP_DETECTION
-              value: {{ .Values.envMap.IMGPROXY_ENABLE_WEBP_DETECTION | quote }}
+              value: {{ .Values.envMap.IMGPROXY_ENABLE_WEBP_DETECTION.value | quote }}
           image: {{ .Values.images.imgproxy }}
           livenessProbe:
             exec:

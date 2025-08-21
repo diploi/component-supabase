@@ -17,7 +17,7 @@ spec:
       containers:
         - env:
             - name: API_JWT_SECRET
-              value: {{ .Values.envMap.JWT_SECRET | quote }}
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: APP_NAME
               value: realtime
             - name: DB_AFTER_CONNECT_QUERY
@@ -25,13 +25,13 @@ spec:
             - name: DB_ENC_KEY
               value: supabaserealtime
             - name: DB_HOST
-              value: {{ .Values.envMap.POSTGRES_HOST | quote }}
+              value: {{ .Values.envMap.POSTGRES_HOST.value | quote }}
             - name: DB_NAME
-              value: {{ .Values.envMap.POSTGRES_DB | quote }}
+              value: {{ .Values.envMap.POSTGRES_DB.value | quote }}
             - name: DB_PASSWORD
-              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+              value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: DB_PORT
-              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+              value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
             - name: DB_USER
               value: supabase_admin
             - name: DNS_NODES
@@ -45,7 +45,7 @@ spec:
             - name: RUN_JANITOR
               value: 'true'
             - name: SECRET_KEY_BASE
-              value: {{ .Values.envMap.SECRET_KEY_BASE | quote }}
+              value: {{ .Values.envMap.SECRET_KEY_BASE.value | quote }}
             - name: SEED_SELF_HOST
               value: 'true'
           image: {{ .Values.images.realtime }}

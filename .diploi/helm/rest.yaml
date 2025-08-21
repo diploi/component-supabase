@@ -20,18 +20,18 @@ spec:
             - postgrest
           env:
             - name: PGRST_APP_SETTINGS_JWT_EXP
-              value: {{ .Values.envMap.JWT_EXPIRY | quote }}
+              value: {{ .Values.envMap.JWT_EXPIRY.value | quote }}
             - name: PGRST_APP_SETTINGS_JWT_SECRET
-              value: {{ .Values.envMap.JWT_SECRET | quote }}
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: PGRST_DB_ANON_ROLE
               value: anon
             - name: PGRST_DB_SCHEMAS
-              value: {{ .Values.envMap.PGRST_DB_SCHEMAS | quote }}
+              value: {{ .Values.envMap.PGRST_DB_SCHEMAS.value | quote }}
             - name: PGRST_DB_URI
-              value: "postgres://authenticator:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}"
+              value: "postgres://authenticator:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
             - name: PGRST_DB_USE_LEGACY_GUCS
               value: 'false'
             - name: PGRST_JWT_SECRET
-              value: {{ .Values.envMap.JWT_SECRET | quote }}
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
           image: {{ .Values.images.rest }}
           name: supabase-rest

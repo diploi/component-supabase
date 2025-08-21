@@ -23,7 +23,7 @@ spec:
             - /etc/vector/vector.yml
           env:
             - name: LOGFLARE_PUBLIC_ACCESS_TOKEN
-              value: {{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN | quote }}
+              value: {{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}
           image: {{ .Values.images.vector }}
           livenessProbe:
             exec:

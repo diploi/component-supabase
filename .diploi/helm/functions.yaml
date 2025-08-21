@@ -24,17 +24,17 @@ spec:
             - /home/deno/functions/main
           env:
             - name: JWT_SECRET
-              value: {{ .Values.envMap.JWT_SECRET | quote }}
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: SUPABASE_ANON_KEY
-              value: {{ .Values.envMap.ANON_KEY | quote }}
+              value: {{ .Values.envMap.ANON_KEY.value | quote }}
             - name: SUPABASE_DB_URL
-              value: "postgresql://{{ .Values.envMap.POSTGRES_USER }}:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/{{ .Values.envMap.POSTGRES_DB }}"
+              value: "postgresql://{{ .Values.envMap.POSTGRES_USER.value }}:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
             - name: SUPABASE_SERVICE_ROLE_KEY
-              value: {{ .Values.envMap.SERVICE_ROLE_KEY | quote }}
+              value: {{ .Values.envMap.SERVICE_ROLE_KEY.value | quote }}
             - name: SUPABASE_URL
-              value: {{ .Values.envMap.KONG_INTERNAL_URL | quote }}
+              value: {{ .Values.envMap.KONG_INTERNAL_URL.value | quote }}
             - name: VERIFY_JWT
-              value: {{ .Values.envMap.FUNCTIONS_VERIFY_JWT | quote }}
+              value: {{ .Values.envMap.FUNCTIONS_VERIFY_JWT.value | quote }}
           image: {{ .Values.images.functions }}
           name: supabase-edge-functions
           volumeMounts:

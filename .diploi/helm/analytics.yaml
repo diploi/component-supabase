@@ -20,11 +20,11 @@ spec:
             - name: DB_DATABASE
               value: _supabase
             - name: DB_HOSTNAME
-              value: {{ .Values.envMap.POSTGRES_HOST | quote }}
+              value: {{ .Values.envMap.POSTGRES_HOST.value | quote }}
             - name: DB_PASSWORD
-              value: {{ .Values.envMap.POSTGRES_PASSWORD | quote }}
+              value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: DB_PORT
-              value: {{ .Values.envMap.POSTGRES_PORT | quote }}
+              value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
             - name: DB_SCHEMA
               value: _analytics
             - name: DB_USERNAME
@@ -36,9 +36,9 @@ spec:
             - name: LOGFLARE_NODE_HOST
               value: 127.0.0.1
             - name: LOGFLARE_PRIVATE_ACCESS_TOKEN
-              value: {{ .Values.envMap.LOGFLARE_PRIVATE_ACCESS_TOKEN | quote }}
+              value: {{ .Values.envMap.LOGFLARE_PRIVATE_ACCESS_TOKEN.value | quote }}
             - name: LOGFLARE_PUBLIC_ACCESS_TOKEN
-              value: {{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN | quote }}
+              value: {{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}
             - name: LOGFLARE_SINGLE_TENANT
               value: 'true'
             - name: LOGFLARE_SUPABASE_MODE
@@ -46,7 +46,7 @@ spec:
             - name: POSTGRES_BACKEND_SCHEMA
               value: _analytics
             - name: POSTGRES_BACKEND_URL
-              value: "postgresql://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase"
+              value: "postgresql://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/_supabase"
           image: {{ .Values.images.analytics }}
           livenessProbe:
             exec:
