@@ -5,7 +5,7 @@ metadata:
     app: supavisor
   name: supavisor
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: supavisor
@@ -17,6 +17,15 @@ spec:
         app: supavisor
     spec:
       restartPolicy: Always
+      initContainers:
+        - name: wait-for-db-and-analytics
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
+              until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
       containers:
         - args:
             - /bin/sh
@@ -73,9 +82,7 @@ spec:
           name: supabase-pooler
           ports:
             - containerPort: 5432
-              protocol: TCP
             - containerPort: 6543
-              protocol: TCP
           volumeMounts:
             - mountPath: /etc/pooler/pooler.exs
               subPath: pooler.exs
