@@ -30,7 +30,7 @@ spec:
             - name: NEXT_ANALYTICS_BACKEND_PROVIDER
               value: postgres
             - name: NEXT_PUBLIC_ENABLE_LOGS
-              value: true
+              value: 'true'
             - name: OPENAI_API_KEY
               value: {{ .Values.envMap.OPENAI_API_KEY | quote }}
             - name: POSTGRES_PASSWORD

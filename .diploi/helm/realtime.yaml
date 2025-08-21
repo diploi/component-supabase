@@ -21,7 +21,7 @@ spec:
             - name: APP_NAME
               value: realtime
             - name: DB_AFTER_CONNECT_QUERY
-              value: SET search_path TO _realtime
+              value: 'SET search_path TO _realtime'
             - name: DB_ENC_KEY
               value: supabaserealtime
             - name: DB_HOST
@@ -37,13 +37,13 @@ spec:
             - name: DNS_NODES
               value: ''
             - name: ERL_AFLAGS
-              value: -proto_dist inet_tcp
+              value: '-proto_dist inet_tcp'
             - name: PORT
-              value: 4000
+              value: '4000'
             - name: RLIMIT_NOFILE
-              value: 10000
+              value: '10000'
             - name: RUN_JANITOR
-              value: true
+              value: 'true'
             - name: SECRET_KEY_BASE
               value: {{ .Values.envMap.SECRET_KEY_BASE | quote }}
             - name: SEED_SELF_HOST

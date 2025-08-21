@@ -26,7 +26,7 @@ spec:
             - name: API_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET | quote }}
             - name: CLUSTER_POSTGRES
-              value: true
+              value: 'true'
             - name: DATABASE_URL
               value: "ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD }}@{{ .Values.envMap.POSTGRES_HOST }}:{{ .Values.envMap.POSTGRES_PORT }}/_supabase"
             - name: DB_POOL_SIZE
@@ -44,7 +44,7 @@ spec:
             - name: POOLER_TENANT_ID
               value: {{ .Values.envMap.POOLER_TENANT_ID | quote }}
             - name: PORT
-              value: 4000
+              value: '4000'
             - name: POSTGRES_DB
               value: {{ .Values.envMap.POSTGRES_DB | quote }}
             - name: POSTGRES_PASSWORD
