@@ -30,15 +30,15 @@ spec:
             - name: DATABASE_URL
               value: "ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/_supabase"
             - name: DB_POOL_SIZE
-              value: {{ .Values.envMap.POOLER_DB_POOL_SIZE.value | quote }}
+              value: '5'
             - name: ERL_AFLAGS
               value: -proto_dist inet_tcp
             - name: METRICS_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: POOLER_DEFAULT_POOL_SIZE
-              value: {{ .Values.envMap.POOLER_DEFAULT_POOL_SIZE.value | quote }}
+              value: '20'
             - name: POOLER_MAX_CLIENT_CONN
-              value: {{ .Values.envMap.POOLER_MAX_CLIENT_CONN.value | quote }}
+              value: '100'
             - name: POOLER_POOL_MODE
               value: transaction
             - name: POOLER_TENANT_ID
