@@ -90,6 +90,5 @@ spec:
               readOnly: true
       volumes:
         - name: pooler-config
-          hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/pooler/pooler.exs"
-            type: File
+          configMap:
+            name: pooler-config
