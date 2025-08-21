@@ -28,7 +28,7 @@ spec:
             - name: DASHBOARD_USERNAME
               value: {{ .Values.envMap.DASHBOARD_USERNAME | quote }}
             - name: KONG_DATABASE
-              value: off
+              value: 'off'
             - name: KONG_DECLARATIVE_CONFIG
               value: /home/kong/kong.yml
             - name: KONG_DNS_ORDER

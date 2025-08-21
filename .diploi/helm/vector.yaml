@@ -32,7 +32,7 @@ spec:
                 - --no-verbose
                 - --tries=1
                 - --spider
-                - "http://vector.{{ .Values.identifier }}:9001/health"
+                - http://vector.{{ .Values.identifier }}:9001/health
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 5
