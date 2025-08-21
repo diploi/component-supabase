@@ -21,6 +21,8 @@ spec:
         - args:
             - postgres
             - -c
+            - config_file=/etc/postgresql/postgresql.conf
+            - -c
             - log_min_messages=fatal
           env:
             - name: JWT_EXP
@@ -56,31 +58,35 @@ spec:
           name: supabase-db
           volumeMounts:
             - mountPath: /docker-entrypoint-initdb.d/migrations/99-realtime.sql
-              subPath: 99-realtime.sql
+              subPath: realtime.sql
               name: db-config
               readOnly: true
             - mountPath: /docker-entrypoint-initdb.d/init-scripts/98-webhooks.sql
-              subPath: 98-webhooks.sql
+              subPath: webhooks.sql
               name: db-config
               readOnly: true
             - mountPath: /docker-entrypoint-initdb.d/init-scripts/99-roles.sql
-              subPath: 99-roles.sql
+              subPath: roles.sql
               name: db-config
               readOnly: true
             - mountPath: /docker-entrypoint-initdb.d/init-scripts/99-jwt.sql
-              subPath: 99-jwt.sql
+              subPath: jwt.sql
               name: db-config
               readOnly: true
             - mountPath: /docker-entrypoint-initdb.d/migrations/97-_supabase.sql
-              subPath: 97-_supabase.sql
+              subPath: _supabase.sql
               name: db-config
               readOnly: true
             - mountPath: /docker-entrypoint-initdb.d/migrations/99-logs.sql
-              subPath: 99-logs.sql
+              subPath: logs.sql
               name: db-config
               readOnly: true
             - mountPath: /docker-entrypoint-initdb.d/migrations/99-pooler.sql
-              subPath: 99-pooler.sql
+              subPath: pooler.sql
+              name: db-config
+              readOnly: true
+            - mountPath: /etc/postgresql/postgresql.conf
+              subPath: postgresql.conf
               name: db-config
               readOnly: true
             - mountPath: /etc/postgresql-custom
