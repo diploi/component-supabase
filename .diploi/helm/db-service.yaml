@@ -10,4 +10,4 @@ spec:
       port: {{ .Values.envMap.POSTGRES_PORT.value }}
       targetPort: {{ .Values.envMap.POSTGRES_PORT.value }}
   selector:
-    app: postgres
+    app: db
