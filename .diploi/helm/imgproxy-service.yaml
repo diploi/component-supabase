@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: imgproxy
+  name: imgproxy
+spec:
+  ports:
+    - name: '5001'
+      port: 5001
+      targetPort: 5001
+  selector:
+    app: imgproxy
