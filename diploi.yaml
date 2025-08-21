@@ -222,6 +222,8 @@ environmentVariables:
     defaultValue: true
   - identifier: FUNCTIONS_VERIFY_JWT
     defaultValue: false
+  - identifier: JWT_EXPIRY
+    defaultValue: 3600
 
 images:
   - identifier: studio
