@@ -66,6 +66,8 @@ spec:
           #   periodSeconds: 5
           #   timeoutSeconds: 5
           name: supabase-db
+          ports:
+            - containerPort: {{ .Values.envMap.POSTGRES_PORT.value }}
           volumeMounts:
             - mountPath: /docker-entrypoint-initdb.d/migrations/99-realtime.sql
               subPath: realtime.sql
