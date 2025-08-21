@@ -46,13 +46,4 @@ spec:
             - name: SUPABASE_URL
               value: {{ .Values.envMap.KONG_INTERNAL_URL | quote }}
           image: {{ .Values.images.studio }}
-          livenessProbe:
-            exec:
-              command:
-                - node
-                - -e
-                - fetch('{{ .Values.envMap.STUDIO_INTERNAL_URL }}/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})
-            failureThreshold: 3
-            periodSeconds: 5
-            timeoutSeconds: 10
           name: supabase-studio
