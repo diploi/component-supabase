@@ -5,7 +5,7 @@ metadata:
     app: rest
   name: rest
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: rest
@@ -15,6 +15,15 @@ spec:
         app: rest
     spec:
       restartPolicy: Always
+      initContainers:
+        - name: wait-for-db-and-analytics
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
+              until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
       containers:
         - args:
             - postgrest
