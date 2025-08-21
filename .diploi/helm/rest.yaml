@@ -44,3 +44,5 @@ spec:
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
           image: {{ .Values.images.rest }}
           name: supabase-rest
+          ports:
+            - containerPort: 3000
