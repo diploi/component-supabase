@@ -44,17 +44,17 @@ spec:
             - name: POSTGRES_PORT
               value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
           image: {{ .Values.images.db }}
-          livenessProbe:
-            exec:
-              command:
-                - pg_isready
-                - -U
-                - postgres
-                - -h
-                - localhost
-            failureThreshold: 10
-            periodSeconds: 5
-            timeoutSeconds: 5
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - pg_isready
+          #       - -U
+          #       - postgres
+          #       - -h
+          #       - localhost
+          #   failureThreshold: 10
+          #   periodSeconds: 5
+          #   timeoutSeconds: 5
           name: supabase-db
           volumeMounts:
             - mountPath: /docker-entrypoint-initdb.d/migrations/99-realtime.sql

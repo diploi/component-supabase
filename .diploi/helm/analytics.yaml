@@ -48,14 +48,14 @@ spec:
             - name: POSTGRES_BACKEND_URL
               value: "postgresql://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/_supabase"
           image: {{ .Values.images.analytics }}
-          livenessProbe:
-            exec:
-              command:
-                - curl
-                - http://localhost:4000/health
-            failureThreshold: 10
-            periodSeconds: 5
-            timeoutSeconds: 5
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - curl
+          #       - http://localhost:4000/health
+          #   failureThreshold: 10
+          #   periodSeconds: 5
+          #   timeoutSeconds: 5
           name: supabase-analytics
           ports:
             - containerPort: 4000

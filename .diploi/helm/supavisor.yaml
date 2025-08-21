@@ -58,18 +58,18 @@ spec:
             - name: VAULT_ENC_KEY
               value: {{ .Values.envMap.VAULT_ENC_KEY.value | quote }}
           image: {{ .Values.images.supavisor }}
-          livenessProbe:
-            exec:
-              command:
-                - curl
-                - -sSfL
-                - --head
-                - -o
-                - /dev/null
-                - http://127.0.0.1:4000/api/health
-            failureThreshold: 5
-            periodSeconds: 10
-            timeoutSeconds: 5
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - curl
+          #       - -sSfL
+          #       - --head
+          #       - -o
+          #       - /dev/null
+          #       - http://127.0.0.1:4000/api/health
+          #   failureThreshold: 5
+          #   periodSeconds: 10
+          #   timeoutSeconds: 5
           name: supabase-pooler
           ports:
             - containerPort: 5432

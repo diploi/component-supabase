@@ -46,17 +46,17 @@ spec:
             - name: TENANT_ID
               value: stub
           image: {{ .Values.images.storage }}
-          livenessProbe:
-            exec:
-              command:
-                - wget
-                - --no-verbose
-                - --tries=1
-                - --spider
-                - {{ .Values.envMap.STORAGE_INTERNAL_URL.value | quote }}
-            failureThreshold: 3
-            periodSeconds: 5
-            timeoutSeconds: 5
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - wget
+          #       - --no-verbose
+          #       - --tries=1
+          #       - --spider
+          #       - {{ .Values.envMap.STORAGE_INTERNAL_URL.value | quote }}
+          #   failureThreshold: 3
+          #   periodSeconds: 5
+          #   timeoutSeconds: 5
           name: supabase-storage
           volumeMounts:
             - mountPath: /var/lib/storage

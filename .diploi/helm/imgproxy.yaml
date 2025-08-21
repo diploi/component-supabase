@@ -28,14 +28,14 @@ spec:
             - name: IMGPROXY_ENABLE_WEBP_DETECTION
               value: 'true'
           image: {{ .Values.images.imgproxy }}
-          livenessProbe:
-            exec:
-              command:
-                - imgproxy
-                - health
-            failureThreshold: 3
-            periodSeconds: 5
-            timeoutSeconds: 5
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - imgproxy
+          #       - health
+          #   failureThreshold: 3
+          #   periodSeconds: 5
+          #   timeoutSeconds: 5
           name: supabase-imgproxy
           volumeMounts:
             - mountPath: /var/lib/storage

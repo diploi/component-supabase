@@ -74,15 +74,15 @@ spec:
             - name: GOTRUE_URI_ALLOW_LIST
               value: {{ .Values.envMap.ADDITIONAL_REDIRECT_URLS.value | quote }}
           image: {{ .Values.images.auth }}
-          livenessProbe:
-            exec:
-              command:
-                - wget
-                - --no-verbose
-                - --tries=1
-                - --spider
-                - http://localhost:9999/health
-            failureThreshold: 3
-            periodSeconds: 5
-            timeoutSeconds: 5
+          # livenessProbe:
+          #   exec:
+          #     command:
+          #       - wget
+          #       - --no-verbose
+          #       - --tries=1
+          #       - --spider
+          #       - http://localhost:9999/health
+          #   failureThreshold: 3
+          #   periodSeconds: 5
+          #   timeoutSeconds: 5
           name: supabase-auth
