@@ -22,7 +22,7 @@ spec:
       initContainers:
       - name: fix-permissions
         image: busybox
-        command: ["sh", "-c", "mkdir -p /etc/postgresql-custom && chmod 0770 /etc/postgresql-custom && chown 999:999 /etc/postgresql-custom"]
+        command: ["sh", "-c", "mkdir -p /etc/postgresql-custom && chmod 0770 /etc/postgresql-custom && chown 105:105 /etc/postgresql-custom"]
         volumeMounts:
           - name: pgsodium-mount
             mountPath: /etc/postgresql-custom
@@ -30,6 +30,8 @@ spec:
       containers:
         - args:
             - postgres
+            - -c
+            - config_file=/etc/postgresql/postgresql.conf
             - -c
             - log_min_messages=fatal
           env:
