@@ -5,7 +5,7 @@ metadata:
     app: auth
   name: auth
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: auth
@@ -15,6 +15,15 @@ spec:
         app: auth
     spec:
       restartPolicy: Always
+      initContainers:
+        - name: wait-for-db-and-analytics
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
+              until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
       containers:
         - env:
             - name: API_EXTERNAL_URL
@@ -86,3 +95,5 @@ spec:
           #   periodSeconds: 5
           #   timeoutSeconds: 5
           name: supabase-auth
+          ports:
+            - containerPort: 9999
