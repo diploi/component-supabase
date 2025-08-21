@@ -105,6 +105,10 @@ parameterGroups:
         identifier: LOGFLARE_PRIVATE_ACCESS_TOKEN
         defaultValue: '${generate-random-password:64}'
         type: secret
+      - name: Phoenix Secret
+        identifier: SECRET_KEY_BASE
+        defaultValue: '${generate-random-password:48}'
+        type: secret
   - name: PostgreSQL
     identifier: postgres
     description: Superuser & connection configuration
