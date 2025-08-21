@@ -40,7 +40,7 @@ spec:
             - name: SUPABASE_ANON_KEY
               value: {{ .Values.envMap.ANON_KEY.value | quote }}
             - name: SUPABASE_PUBLIC_URL
-              value: {{ .Values.envMap.SUPABASE_PUBLIC_URL.value | quote }}
+              value: {{ .Values.envMap.SITE_URL.value | quote }}
             - name: SUPABASE_SERVICE_KEY
               value: {{ .Values.envMap.SERVICE_ROLE_KEY.value | quote }}
             - name: SUPABASE_URL
