@@ -21,8 +21,6 @@ spec:
         - args:
             - postgres
             - -c
-            - config_file=/etc/postgresql/postgresql.conf
-            - -c
             - log_min_messages=fatal
           env:
             - name: JWT_EXP
