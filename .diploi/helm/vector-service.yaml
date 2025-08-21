@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: vector
+  name: vector
+spec:
+  ports:
+    - name: '9001'
+      port: 9001
+      targetPort: 9001
+  selector:
+    app: vector

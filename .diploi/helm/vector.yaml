@@ -5,7 +5,7 @@ metadata:
     app: vector
   name: vector
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: vector
@@ -37,6 +37,8 @@ spec:
           #   periodSeconds: 5
           #   timeoutSeconds: 5
           name: supabase-vector
+          ports:
+            - containerPort: 9001
           volumeMounts:
             - mountPath: /etc/vector/vector.yml
               subPath: vector.yml
