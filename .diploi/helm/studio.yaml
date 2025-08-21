@@ -51,7 +51,7 @@ spec:
               command:
                 - node
                 - -e
-                - "fetch('{{ .Values.envMap.STUDIO_INTERNAL_URL | quote }}/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})"
+                - fetch('{{ .Values.envMap.STUDIO_INTERNAL_URL | quote }}/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 10
