@@ -63,5 +63,5 @@ spec:
             failureThreshold: 3
             periodSeconds: 5
             timeoutSeconds: 5
-          name: realtime-dev.supabase-realtime
+          name: realtime
       restartPolicy: Always
