@@ -5,7 +5,7 @@ metadata:
     app: kong
   name: kong
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: kong
@@ -65,12 +65,10 @@ spec:
           name: supabase-kong
           ports:
             - containerPort: 8000
-              protocol: TCP
             - containerPort: 8443
-              protocol: TCP
           volumeMounts:
             - mountPath: /home/kong/temp.yml
-              subPath: temp.yml
+              subPath: kong.yml
               name: kong-config
               readOnly: true
       volumes:
