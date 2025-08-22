@@ -5,7 +5,7 @@ metadata:
     app: vector
   name: vector
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: vector
@@ -40,12 +40,15 @@ spec:
           ports:
             - containerPort: 9001
           volumeMounts:
+            - mountPath: /etc/vector/secret.sh
+              name: vector-config
+              subPath: secret.sh
+              readOnly: true
             - mountPath: /etc/vector/vector.yml
               subPath: vector.yml
               name: vector-config
               readOnly: true
       volumes:
         - name: vector-config
-          hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/logs/vector.yml"
-            type: File
+          configMap:
+            name: vector-config

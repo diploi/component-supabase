@@ -43,7 +43,7 @@ spec:
             - name: VERIFY_JWT
               value: {{ .Values.envMap.FUNCTIONS_VERIFY_JWT.value | quote }}
           image: {{ .Values.images.functions }}
-          name: supabase-edge-functions
+          name: supabase-functions
           ports:
             - containerPort: 9000
           volumeMounts:

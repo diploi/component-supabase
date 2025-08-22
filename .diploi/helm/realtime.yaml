@@ -73,6 +73,6 @@ spec:
           #   failureThreshold: 3
           #   periodSeconds: 5
           #   timeoutSeconds: 5
-          name: realtime
+          name: supabase-realtime
           ports:
             - containerPort: 4000
