@@ -24,6 +24,10 @@ spec:
           env:
             - name: LOGFLARE_PUBLIC_ACCESS_TOKEN
               value: {{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}
+            - name: VECTOR_SELF_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           image: {{ .Values.images.vector }}
           # livenessProbe:
           #   exec:
