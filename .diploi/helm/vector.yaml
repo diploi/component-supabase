@@ -40,10 +40,6 @@ spec:
           ports:
             - containerPort: 9001
           volumeMounts:
-            - mountPath: /etc/vector/secret.sh
-              name: vector-config
-              subPath: secret.sh
-              readOnly: true
             - mountPath: /etc/vector/vector.yml
               subPath: vector.yml
               name: vector-config
