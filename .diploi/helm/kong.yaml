@@ -17,6 +17,13 @@ spec:
         app: kong
     spec:
       restartPolicy: Always
+      initContainers:
+        - name: wait-for-analytics
+          image: busybox
+          command:
+            - sh
+            - -c
+            - until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
       containers:
         - command:
             - bash
@@ -73,6 +80,5 @@ spec:
               readOnly: true
       volumes:
         - name: kong-config
-          hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/api/kong.yml"
-            type: File
+          configMap:
+            name: kong-config
