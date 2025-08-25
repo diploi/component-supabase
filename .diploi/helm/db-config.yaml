@@ -256,3 +256,57 @@ data:
       REVOKE ALL ON FUNCTION supabase_functions.http_request() FROM PUBLIC;
       GRANT EXECUTE ON FUNCTION supabase_functions.http_request() TO postgres, anon, authenticated, service_role;
     COMMIT;
+
+  postgresql.conf: |
+    data_directory = '/var/lib/postgresql/data'
+    hba_file = '/etc/postgresql/pg_hba.conf'
+    ident_file = '/etc/postgresql/pg_ident.conf'
+    listen_addresses = '*'
+    unix_socket_directories = '/var/run/postgresql'
+    authentication_timeout = 1min
+    password_encryption = scram-sha-256
+    db_user_namespace = off
+    ssl = off
+    ssl_ca_file = ''
+    ssl_cert_file = ''
+    ssl_crl_file = ''
+    ssl_crl_dir = ''
+    ssl_key_file = ''
+    ssl_ciphers = 'HIGH:MEDIUM:+3DES:!aNULL'
+    ssl_prefer_server_ciphers = on
+    ssl_ecdh_curve = 'prime256v1'
+    ssl_min_protocol_version = 'TLSv1.2'
+    ssl_max_protocol_version = ''
+    ssl_dh_params_file = ''
+    ssl_passphrase_command = ''
+    ssl_passphrase_command_supports_reload = off
+    shared_buffers = 128MB
+    wal_level = logical
+    checkpoint_completion_target = 0.5
+    checkpoint_flush_after = 256kB
+    max_wal_senders = 10
+    max_replication_slots = 5
+    max_slot_wal_keep_size = 4096
+    effective_cache_size = 128MB
+    include = '/etc/postgresql/logging.conf'
+    log_line_prefix = '%h %m [%p] %q%u@%d '
+    log_statement = 'ddl'
+    log_timezone = 'UTC'
+    cluster_name = 'main'
+    row_security = on
+    timezone = 'UTC'
+    extra_float_digits = 0
+    lc_messages = 'en_US.UTF-8'
+    lc_monetary = 'en_US.UTF-8'
+    lc_numeric = 'en_US.UTF-8'
+    lc_time = 'en_US.UTF-8'
+    default_text_search_config = 'pg_catalog.english'
+    session_preload_libraries = 'supautils'
+    shared_preload_libraries = 'pg_stat_statements, pgaudit, plpgsql, plpgsql_check, pg_cron, pg_net, pgsodium, timescaledb, auto_explain, pg_tle, plan_filter, supabase_vault'
+    jit_provider = 'llvmjit'
+    auto_explain.log_min_duration = 10s
+    cron.database_name = 'postgres'
+    cron.database_name = 'postgres'
+    pgsodium.getkey_script= '/usr/lib/postgresql/bin/pgsodium_getkey.sh'
+    vault.getkey_script= '/usr/lib/postgresql/bin/pgsodium_getkey.sh'
+    auto_explain.log_min_duration = 10s
