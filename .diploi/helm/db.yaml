@@ -97,10 +97,10 @@ spec:
               subPath: pooler.sql
               name: db-config
               readOnly: true
-            - mountPath: /etc/postgresql/postgresql.conf
-              subPath: postgresql.conf
-              name: db-init
-              readOnly: true
+            # - mountPath: /etc/postgresql/postgresql.conf
+            #   subPath: postgresql.conf
+            #   name: db-init
+            #   readOnly: true
             - mountPath: /etc/postgresql-custom
               name: pgsodium-mount
             - mountPath: /var/lib/postgresql/data
