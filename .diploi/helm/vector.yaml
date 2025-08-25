@@ -48,7 +48,13 @@ spec:
               subPath: vector.yml
               name: vector-config
               readOnly: true
+            - mountPath: /var/log/pods
+              name: kubernetes-logs
+              readOnly: true
       volumes:
         - name: vector-config
           configMap:
             name: vector-config
+        - name: kubernetes-logs
+          hostPath:
+            path: /var/log/pods
