@@ -52,4 +52,4 @@ spec:
       volumes:
         - name: functions-mount
           hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/functions"
+            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/functions"
