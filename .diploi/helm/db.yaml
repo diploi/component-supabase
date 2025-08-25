@@ -99,7 +99,7 @@ spec:
               readOnly: true
             - mountPath: /etc/postgresql/postgresql.conf
               subPath: postgresql.conf
-              name: db-config
+              name: db-init
               readOnly: true
             - mountPath: /etc/postgresql-custom
               name: pgsodium-mount
@@ -107,6 +107,9 @@ spec:
               name: postgres-mount
       volumes:
         - name: db-config
+          configMap:
+            name: db-config
+        - name: db-init
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/volumes/db"
         - name: pgsodium-mount
