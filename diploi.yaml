@@ -3,7 +3,7 @@ type: component
 name: Supabase
 description: Official Diploi component for Supabase
 
-defaultContainer: studio
+defaultContainer: supabase-studio
 
 hosts:
   - name: Supabase
