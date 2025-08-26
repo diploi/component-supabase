@@ -82,12 +82,11 @@ parameterGroups:
         defaultValue: '${generate-random-password:32}'
         type: secret
       - name: Anon Key
-        description: To generate a new value, see https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
         identifier: ANON_KEY
         defaultValue: '${generate-jwt:JWT_SECRET:role=anon&iss=supabase&exp=126144000}'
         type: string
       - name: Service Role Key
-        description: To generate a new value, see https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
+        description: To generate new JWT values, see https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys
         identifier: SERVICE_ROLE_KEY
         defaultValue: '${generate-jwt:JWT_SECRET:role=service_role&iss=supabase&exp=126144000}'
         type: secret
