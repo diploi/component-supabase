@@ -47,9 +47,13 @@ spec:
           ports:
             - containerPort: 9000
           volumeMounts:
+            {{- if hasKey .Values.storage "code" }}
             - mountPath: /home/deno/functions
               name: functions-mount
+            {{- end }}
       volumes:
+        {{- if hasKey .Values.storage "code" }}
         - name: functions-mount
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/functions"
+        {{- end }}
