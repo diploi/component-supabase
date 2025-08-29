@@ -7,4 +7,6 @@ ARG FOLDER=/app
 
 # Copy the /functions folder over to the correct location
 COPY . /app
+RUN mkdir -p /home/deno/functions
 RUN cp -R ${FOLDER}/functions /home/deno/functions
+RUN rm -rf /app
