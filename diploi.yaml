@@ -248,7 +248,7 @@ images:
   - identifier: meta
     image: supabase/postgres-meta:v0.91.0
   - identifier: functions
-    image: supabase/edge-runtime:v1.67.4
+    prebuildImage: ghcr.io/diploi/component-supabase:[tag]
   - identifier: analytics
     image: supabase/logflare:1.14.2
   - identifier: db
