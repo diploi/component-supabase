@@ -9,6 +9,7 @@ hosts:
   - name: Supabase
     identifier: app
     urlFormat: '[label].[default-domain]'
+    link: https://${DASHBOARD_USERNAME}:${DASHBOARD_PASSWORD}@${HOST}
 
 connectionStrings:
   - name: Internal Address
