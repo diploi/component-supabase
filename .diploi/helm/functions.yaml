@@ -17,6 +17,8 @@ spec:
         app: functions
     spec:
       restartPolicy: Always
+      imagePullSecrets:
+        - name: diploi-pull-secret
       initContainers:
         - name: wait-for-analytics
           image: busybox
