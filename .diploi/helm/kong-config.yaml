@@ -43,7 +43,7 @@ data:
           status_code: 401
           content_type: "text/html; charset=utf-8"
           body: |-
-            <!DOCTYPE html><html><body><p>Test</p></body></html>
+            Test
 
     ###
     ### API Routes
