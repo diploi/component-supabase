@@ -14,10 +14,10 @@ data:
       - username: DASHBOARD
       - username: anon
         keyauth_credentials:
-          - key: $SUPABASE_ANON_KEY
+          - key: {{ .Values.envMap.ANON_KEY.value }}
       - username: service_role
         keyauth_credentials:
-          - key: $SUPABASE_SERVICE_KEY
+          - key: {{ .Values.envMap.SERVICE_ROLE_KEY.value }}
       - username: studio-anon
       - username: studio-admin
         jwt_secrets:
@@ -51,7 +51,7 @@ data:
     services:
       ## Open Auth routes
       - name: auth-v1-open
-        url: $AUTH_INTERNAL_URL/verify
+        url: {{ .Values.envMap.AUTH_INTERNAL_URL.value }}/verify
         routes:
           - name: auth-v1-open
             strip_path: true
@@ -60,7 +60,7 @@ data:
         plugins:
           - name: cors
       - name: auth-v1-open-callback
-        url: $AUTH_INTERNAL_URL/callback
+        url: {{ .Values.envMap.AUTH_INTERNAL_URL.value }}/callback
         routes:
           - name: auth-v1-open-callback
             strip_path: true
@@ -69,7 +69,7 @@ data:
         plugins:
           - name: cors
       - name: auth-v1-open-authorize
-        url: $AUTH_INTERNAL_URL/authorize
+        url: {{ .Values.envMap.AUTH_INTERNAL_URL.value }}/authorize
         routes:
           - name: auth-v1-open-authorize
             strip_path: true
@@ -80,8 +80,8 @@ data:
 
       ## Secure Auth routes
       - name: auth-v1
-        _comment: 'GoTrue: /auth/v1/* -> $AUTH_INTERNAL_URL/*'
-        url: $AUTH_INTERNAL_URL/
+        _comment: 'GoTrue: /auth/v1/* -> {{ .Values.envMap.AUTH_INTERNAL_URL.value }}/*'
+        url: {{ .Values.envMap.AUTH_INTERNAL_URL.value }}/
         routes:
           - name: auth-v1-all
             strip_path: true
@@ -101,8 +101,8 @@ data:
 
       ## Secure REST routes
       - name: rest-v1
-        _comment: 'PostgREST: /rest/v1/* -> $REST_INTERNAL_URL/*'
-        url: $REST_INTERNAL_URL/
+        _comment: 'PostgREST: /rest/v1/* -> {{ .Values.envMap.REST_INTERNAL_URL.value }}/*'
+        url: {{ .Values.envMap.REST_INTERNAL_URL.value }}/
         routes:
           - name: rest-v1-all
             strip_path: true
@@ -122,8 +122,8 @@ data:
 
       ## Secure GraphQL routes
       - name: graphql-v1
-        _comment: 'PostgREST: /graphql/v1/* -> $REST_INTERNAL_URL/rpc/graphql'
-        url: $REST_INTERNAL_URL/rpc/graphql
+        _comment: 'PostgREST: /graphql/v1/* -> {{ .Values.envMap.REST_INTERNAL_URL.value }}/rpc/graphql'
+        url: {{ .Values.envMap.REST_INTERNAL_URL.value }}/rpc/graphql
         routes:
           - name: graphql-v1-all
             strip_path: true
@@ -148,8 +148,8 @@ data:
 
       ## Secure Realtime routes
       - name: realtime-v1-ws
-        _comment: 'Realtime: /realtime/v1/* -> $REALTIME_INTERNAL_URL/socket/*'
-        url: http://realtime.$DIPLOI_NAMESPACE:4000/socket
+        _comment: 'Realtime: /realtime/v1/* -> {{ .Values.envMap.REALTIME_INTERNAL_URL.value }}/socket/*'
+        url: http://realtime.{{ .Values.identifier }}:4000/socket
         protocol: ws
         routes:
           - name: realtime-v1-ws
@@ -168,8 +168,8 @@ data:
                 - admin
                 - anon
       - name: realtime-v1-rest
-        _comment: 'Realtime: /realtime/v1/* -> $REALTIME_INTERNAL_URL/socket/*'
-        url: http://realtime.$DIPLOI_NAMESPACE:4000/api
+        _comment: 'Realtime: /realtime/v1/* -> {{ .Values.envMap.REALTIME_INTERNAL_URL.value }}/socket/*'
+        url: http://realtime.{{ .Values.identifier }}:4000/api
         protocol: http
         routes:
           - name: realtime-v1-rest
@@ -189,8 +189,8 @@ data:
                 - anon
       ## Storage routes: the storage server manages its own auth
       - name: storage-v1
-        _comment: 'Storage: /storage/v1/* -> $STORAGE_INTERNAL_URL/*'
-        url: $STORAGE_INTERNAL_URL/
+        _comment: 'Storage: /storage/v1/* -> {{ .Values.envMap.STORAGE_INTERNAL_URL.value }}/*'
+        url: {{ .Values.envMap.STORAGE_INTERNAL_URL.value }}/
         routes:
           - name: storage-v1-all
             strip_path: true
@@ -201,8 +201,8 @@ data:
 
       ## Edge Functions routes
       - name: functions-v1
-        _comment: 'Edge Functions: /functions/v1/* -> $FUNCTIONS_INTERNAL_URL/*'
-        url: $FUNCTIONS_INTERNAL_URL/
+        _comment: 'Edge Functions: /functions/v1/* -> {{ .Values.envMap.FUNCTIONS_INTERNAL_URL.value }}/*'
+        url: {{ .Values.envMap.FUNCTIONS_INTERNAL_URL.value }}/
         routes:
           - name: functions-v1-all
             strip_path: true
@@ -213,8 +213,8 @@ data:
 
       ## Analytics routes
       - name: analytics-v1
-        _comment: 'Analytics: /analytics/v1/* -> $ANALYTICS_INTERNAL_URL/*'
-        url: $ANALYTICS_INTERNAL_URL/
+        _comment: 'Analytics: /analytics/v1/* -> {{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/*'
+        url: {{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/
         routes:
           - name: analytics-v1-all
             strip_path: true
@@ -223,8 +223,8 @@ data:
 
       ## Secure Database routes
       - name: meta
-        _comment: 'pg-meta: /pg/* -> $META_INTERNAL_URL/*'
-        url: $META_INTERNAL_URL/
+        _comment: 'pg-meta: /pg/* -> {{ .Values.envMap.META_INTERNAL_URL.value }}/*'
+        url: {{ .Values.envMap.META_INTERNAL_URL.value }}/
         routes:
           - name: meta-all
             strip_path: true
@@ -242,8 +242,8 @@ data:
 
       ## Protected Dashboard - catch all remaining routes
       - name: dashboard
-        _comment: 'Studio: /* -> $STUDIO_INTERNAL_URL/*'
-        url: $STUDIO_INTERNAL_URL/
+        _comment: 'Studio: /* -> {{ .Values.envMap.STUDIO_INTERNAL_URL.value }}/*'
+        url: {{ .Values.envMap.STUDIO_INTERNAL_URL.value }}/
         routes:
           - name: dashboard-all
             strip_path: true
