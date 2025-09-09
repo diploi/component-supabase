@@ -45,7 +45,7 @@ spec:
             - name: KONG_NGINX_PROXY_PROXY_BUFFER_SIZE
               value: 160k
             - name: KONG_PLUGINS
-              value: 'request-transformer,cors,key-auth,acl,basic-auth,request-termination'
+              value: 'request-transformer,cors,key-auth,acl,basic-auth,request-termination,jwt'
             - name: SUPABASE_ANON_KEY
               value: {{ .Values.envMap.ANON_KEY.value | quote }}
             - name: SUPABASE_SERVICE_KEY

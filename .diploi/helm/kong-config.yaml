@@ -20,11 +20,9 @@ data:
           - key: $SUPABASE_SERVICE_KEY
       - username: studio-anon
       - username: studio-admin
-
-    jwt_secrets:
-      - consumer: studio-admin
-        key: studio-admin
-        secret: "replace-with-a-very-long-random-string"
+        jwt_secrets:
+          - key: studio-admin
+            secret: "replace-with-a-very-long-random-string"
 
     ###
     ### Access Control List
