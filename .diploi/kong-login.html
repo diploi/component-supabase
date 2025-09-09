@@ -27,6 +27,9 @@
         justify-content: center;
         box-sizing: border-box;
       }
+      h1 {
+        font-size: 24px;
+      }
       p,
       form,
       hr {
@@ -78,12 +81,15 @@
       width="64"
       height="64"
     />
+    <h1>Supabase</h1>
     <p>
       <strong>You have been logged out.</strong><br />Login again from the
       <a href="https://console.diploi.com/">Diploi Console</a>, or enter
       credentials for the admin account below.
     </p>
-    <a class="button" href="https://console.diploi.com/">Open Diploi Console</a>
+    <a class="button" href="https://console.diploi.com/"
+      >Login via Diploi Console</a
+    >
     <hr />
     <form>
       <input name="username" placeholder="Username" />
@@ -92,7 +98,7 @@
         You can find the admin credentials from this deployments "Options" tab
         in the <a href="https://console.diploi.com/">Diploi Console</a>.
       </p>
-      <button>Login</button>
+      <button>Login With Credentials</button>
     </form>
   </body>
 </html>
