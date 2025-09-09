@@ -42,7 +42,7 @@ spec:
               value: 'false'
             - name: PGRST_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
-          image: {{ .Values.images.rest }}
+          image: postgrest/postgrest:v12.2.12
           name: supabase-rest
           ports:
             - containerPort: 3000

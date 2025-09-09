@@ -82,7 +82,7 @@ spec:
               value: {{ .Values.envMap.SMTP_USER.value | quote }}
             - name: GOTRUE_URI_ALLOW_LIST
               value: {{ .Values.envMap.ADDITIONAL_REDIRECT_URLS.value | quote }}
-          image: {{ .Values.images.auth }}
+          image: supabase/gotrue:v2.177.0
           # livenessProbe:
           #   exec:
           #     command:

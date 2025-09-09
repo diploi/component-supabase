@@ -27,7 +27,7 @@ spec:
               value: 'true'
             - name: IMGPROXY_ENABLE_WEBP_DETECTION
               value: 'true'
-          image: {{ .Values.images.imgproxy }}
+          image: darthsim/imgproxy:v3.8.0
           # livenessProbe:
           #   exec:
           #     command:

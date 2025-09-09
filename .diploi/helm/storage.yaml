@@ -55,7 +55,7 @@ spec:
               value: file
             - name: TENANT_ID
               value: stub
-          image: {{ .Values.images.storage }}
+          image: supabase/storage-api:v1.25.7
           # livenessProbe:
           #   exec:
           #     command:

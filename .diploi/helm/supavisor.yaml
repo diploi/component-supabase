@@ -66,7 +66,7 @@ spec:
               value: {{ .Values.envMap.SECRET_KEY_BASE.value | quote }}
             - name: VAULT_ENC_KEY
               value: {{ .Values.envMap.VAULT_ENC_KEY.value | quote }}
-          image: {{ .Values.images.supavisor }}
+          image: supabase/supavisor:2.5.7
           # livenessProbe:
           #   exec:
           #     command:

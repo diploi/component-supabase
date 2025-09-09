@@ -53,7 +53,7 @@ spec:
               value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: POSTGRES_PORT
               value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
-          image: {{ .Values.images.db }}
+          image: supabase/postgres:15.8.1.060
           # livenessProbe:
           #   exec:
           #     command:

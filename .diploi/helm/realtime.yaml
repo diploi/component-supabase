@@ -58,7 +58,7 @@ spec:
               value: {{ .Values.envMap.SECRET_KEY_BASE.value | quote }}
             - name: SEED_SELF_HOST
               value: 'true'
-          image: {{ .Values.images.realtime }}
+          image: supabase/realtime:v2.34.47
           # livenessProbe:
           #   exec:
           #     command:

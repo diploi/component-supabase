@@ -232,32 +232,8 @@ environmentVariables:
     defaultValue: ''
 
 images:
-  - identifier: studio
-    image: supabase/studio:2025.06.30-sha-6f5982d
-  - identifier: kong
-    image: kong:2.8.1
-  - identifier: auth
-    image: supabase/gotrue:v2.177.0
-  - identifier: rest
-    image: postgrest/postgrest:v12.2.12
-  - identifier: realtime
-    image: supabase/realtime:v2.34.47
-  - identifier: storage
-    image: supabase/storage-api:v1.25.7
-  - identifier: imgproxy
-    image: darthsim/imgproxy:v3.8.0
-  - identifier: meta
-    image: supabase/postgres-meta:v0.91.0
   - identifier: functions
     prebuildImage: ghcr.io/diploi/component-supabase:[tag]
-  - identifier: analytics
-    image: supabase/logflare:1.14.2
-  - identifier: db
-    image: supabase/postgres:15.8.1.060
-  - identifier: vector
-    image: timberio/vector:0.28.1-alpine
-  - identifier: supavisor
-    image: supabase/supavisor:2.5.7
 
 storage:
   - identifier: supabase

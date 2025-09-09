@@ -38,7 +38,7 @@ spec:
               value: 160k
             - name: KONG_PLUGINS
               value: 'request-transformer,cors,key-auth,acl,basic-auth,request-termination,jwt'
-          image: {{ .Values.images.kong }}
+          image: kong:2.8.1
           name: supabase-kong
           ports:
             - containerPort: 8000
