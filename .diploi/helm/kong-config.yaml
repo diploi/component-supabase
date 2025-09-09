@@ -18,6 +18,11 @@ data:
       - username: service_role
         keyauth_credentials:
           - key: $SUPABASE_SERVICE_KEY
+      - username: studio-anon
+      - username: studio-admin
+        jwt_secrets:
+          - key: studio-admin
+            secret: "replace-with-a-very-long-random-string"
 
     ###
     ### Access Control List
@@ -27,14 +32,18 @@ data:
         group: anon
       - consumer: service_role
         group: admin
-
+  
     ###
-    ### Dashboard credentials
+    ### Diploi login
     ###
-    basicauth_credentials:
-      - consumer: DASHBOARD
-        username: $DASHBOARD_USERNAME
-        password: $DASHBOARD_PASSWORD
+    plugins:
+      - name: request-termination
+        consumer: studio-anon
+        config:
+          status_code: 401
+          content_type: "text/html; charset=utf-8"
+          body: |
+            {{ .Files.Get "templates/kong-login.html" | indent 6 }}
 
     ###
     ### API Routes
@@ -242,6 +251,9 @@ data:
               - /
         plugins:
           - name: cors
-          - name: basic-auth
+          - name: jwt
             config:
-              hide_credentials: true
+              cookie_names: ["sb-studio"]
+              key_claim_name: "iss"
+              claims_to_verify: ["exp"]
+              anonymous: studio-anon
