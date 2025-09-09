@@ -37,7 +37,7 @@ spec:
             - name: KONG_NGINX_PROXY_PROXY_BUFFER_SIZE
               value: 160k
             - name: KONG_PLUGINS
-              value: 'request-transformer,cors,key-auth,acl,basic-auth,request-termination,jwt'
+              value: 'request-transformer,cors,key-auth,acl,request-termination,jwt'
           image: kong:2.8.1
           name: supabase-kong
           ports:
