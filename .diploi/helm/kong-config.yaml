@@ -14,15 +14,15 @@ data:
       - username: DASHBOARD
       - username: anon
         keyauth_credentials:
-          - key: {{ .Values.envMap.ANON_KEY.value }}
+          - key: {{ .Values.envMap.ANON_KEY.value | quote }}
       - username: service_role
         keyauth_credentials:
-          - key: {{ .Values.envMap.SERVICE_ROLE_KEY.value }}
+          - key: {{ .Values.envMap.SERVICE_ROLE_KEY.value | quote }}
       - username: studio-anon
       - username: studio-admin
         jwt_secrets:
           - key: studio-admin
-            secret: "replace-with-a-very-long-random-string"
+            secret: {{ .Values.envMap.JWT_SECRET.value | quote }}
 
     ###
     ### Access Control List
