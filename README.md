@@ -2,6 +2,10 @@
 
 # Supabase Component for Diploi
 
+[![launch with diploi badge](https://diploi.com/launch.svg)](https://diploi.com/component/supabase)
+[![component on diploi badge](https://diploi.com/component.svg)](https://diploi.com/component/supabase)
+[![latest tag badge](https://badgen.net/github/tag/diploi/component-supabase)](https://diploi.com/component/supabase)
+
 Run [Supabase](https://supabase.com/) on Diploi.
 
 Based on the official [supabase/docker](https://github.com/supabase/supabase/tree/master/docker) `docker-compose.yml` file.
