@@ -16,7 +16,8 @@ TODO
 
 ### Development
 
-TODO
+You can develop custom functions with [Deno](https://deno.com/).
+We will create a `/functions` directory for you with a preconfigured `main` function and an example `hello` function.
 
 ### Production
 
