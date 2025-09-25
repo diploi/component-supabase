@@ -9,4 +9,5 @@ ARG FOLDER=/app
 COPY . /app
 RUN mkdir -p /home/deno/functions
 RUN cp -R ${FOLDER}/functions /home/deno
+RUN chown -R 1000:1000 /home/deno
 RUN rm -rf /app
