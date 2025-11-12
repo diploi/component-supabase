@@ -34,6 +34,7 @@ We will create a `/functions` directory for you with a preconfigured `main` func
 
 ## Links
 
+- [Adding Supabase to a project](https://docs.diploi.com/building/components/supabase)
 - [Supabase documentation](https://supabase.com/docs)
 - [Self-Hosting Supabase with Docker](https://supabase.com/docs/guides/self-hosting/docker)
 - [Generate Supabase API keys](https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
