@@ -4,6 +4,13 @@ metadata:
   name: supabase-image-prepuller
   labels:
     app: image-prepuller
+  annotations:
+    # Run before any other resources are created/upgraded
+    "helm.sh/hook": pre-install,pre-upgrade
+    # Weight determines order (lower runs first)
+    "helm.sh/hook-weight": "-10"
+    # Keep the DaemonSet after hook completes (delete-policy options: before-hook-creation, hook-succeeded, hook-failed)
+    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   selector:
     matchLabels:
