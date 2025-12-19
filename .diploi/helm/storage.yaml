@@ -19,12 +19,14 @@ spec:
       restartPolicy: Always
       initContainers:
         - name: wait-for-db
-          image: busybox
-          command:
-            - sh
-            - -c
-            - |
-              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
+          image: postgres:15-alpine
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args: |
+            until pg_isready -h {{ .Values.envMap.POSTGRES_HOST.value }} -p {{ .Values.envMap.POSTGRES_PORT.value }}; do
+            echo "Waiting for database to start..."
+            sleep 1
+            done
       containers:
         - env:
             - name: ANON_KEY
