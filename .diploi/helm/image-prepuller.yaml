@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: supabase-image-prepuller
+  labels:
+    app: image-prepuller
+spec:
+  selector:
+    matchLabels:
+      app: image-prepuller
+  template:
+    metadata:
+      labels:
+        app: image-prepuller
+    spec:
+      initContainers:
+        # Prepull slowest images first (54s+)
+        - name: prepull-supavisor
+          image: supabase/supavisor:2.5.7
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled supavisor image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        - name: prepull-studio
+          image: supabase/studio:2025.06.30-sha-6f5982d
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled studio image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        - name: prepull-postgres
+          image: supabase/postgres:15.8.1.060
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled postgres image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        - name: prepull-functions
+          image: {{ .Values.images.functions }}
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled functions image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        - name: prepull-postgres-meta
+          image: supabase/postgres-meta:v0.91.0
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled postgres-meta image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        # Medium speed images (23-32s)
+        - name: prepull-storage-api
+          image: supabase/storage-api:v1.25.7
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled storage-api image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        - name: prepull-postgrest
+          image: postgrest/postgrest:v12.2.12
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled postgrest image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        - name: prepull-realtime
+          image: supabase/realtime:v2.34.47
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled realtime image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+        
+        - name: prepull-kong
+          image: kong:2.8.1
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled kong image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+      
+      containers:
+        - name: pause
+          image: gcr.io/google_containers/pause:3.2
+          resources:
+            limits:
+              cpu: 10m
+              memory: 16Mi
