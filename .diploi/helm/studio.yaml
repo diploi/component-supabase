@@ -16,12 +16,12 @@ spec:
     spec:
       restartPolicy: Always
       initContainers:
-        - name: wait-for-analytics
+        - name: wait-for-db
           image: busybox
           command:
             - sh
             - -c
-            - until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
+            - until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
       containers:
         - env:
             - name: AUTH_JWT_SECRET
@@ -53,6 +53,7 @@ spec:
             - name: SUPABASE_URL
               value: {{ .Values.envMap.KONG_INTERNAL_URL.value | quote }}
           image: supabase/studio:2025.06.30-sha-6f5982d
+          imagePullPolicy: IfNotPresent
           # livenessProbe:
           #   httpGet:
           #     path: /api/platform/profile

@@ -18,15 +18,13 @@ spec:
     spec:
       restartPolicy: Always
       initContainers:
-        - name: wait-for-db-rest-and-imgproxy
+        - name: wait-for-db
           image: busybox
           command:
             - sh
             - -c
             - |
               until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
-              until nc -z rest 3000; do echo waiting for rest; sleep 2; done;
-              until nc -z imgproxy 5001; do echo waiting for imgproxy; sleep 2; done;
       containers:
         - env:
             - name: ANON_KEY

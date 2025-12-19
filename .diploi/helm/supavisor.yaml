@@ -18,14 +18,13 @@ spec:
     spec:
       restartPolicy: Always
       initContainers:
-        - name: wait-for-db-and-analytics
+        - name: wait-for-db
           image: busybox
           command:
             - sh
             - -c
             - |
               until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
-              until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
       containers:
         - args:
             - /bin/sh
