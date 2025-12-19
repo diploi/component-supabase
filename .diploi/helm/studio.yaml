@@ -20,7 +20,8 @@ spec:
           image: postgres:15-alpine
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c"]
-          args: |
+          args: 
+          - |
             until pg_isready -h {{ .Values.envMap.POSTGRES_HOST.value }} -p {{ .Values.envMap.POSTGRES_PORT.value }}; do
             echo "Waiting for database to start..."
             sleep 1
