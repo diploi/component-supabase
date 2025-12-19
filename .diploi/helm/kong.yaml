@@ -17,13 +17,6 @@ spec:
         app: kong
     spec:
       restartPolicy: Always
-      initContainers:
-        - name: wait-for-db
-          image: busybox
-          command:
-            - sh
-            - -c
-            - until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
       containers:
         - env:
             - name: KONG_DATABASE
