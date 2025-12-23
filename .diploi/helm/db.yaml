@@ -26,6 +26,13 @@ spec:
         volumeMounts:
           - name: pgsodium-mount
             mountPath: /etc/postgresql-custom
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "10m"
+          limits:
+            memory: "64Mi"
+            cpu: "100m"
 
       containers:
         - args:
@@ -54,17 +61,7 @@ spec:
             - name: POSTGRES_PORT
               value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
           image: supabase/postgres:15.8.1.060
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #       - pg_isready
-          #       - -U
-          #       - postgres
-          #       - -h
-          #       - localhost
-          #   failureThreshold: 10
-          #   periodSeconds: 5
-          #   timeoutSeconds: 5
+          imagePullPolicy: IfNotPresent
           name: supabase-db
           ports:
             - containerPort: {{ .Values.envMap.POSTGRES_PORT.value }}

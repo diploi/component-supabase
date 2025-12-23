@@ -8,9 +8,9 @@ metadata:
     # Run before any other resources are created/upgraded
     "helm.sh/hook": pre-install,pre-upgrade
     # Weight determines order (lower runs first)
-    "helm.sh/hook-weight": "-10"
+    "helm.sh/hook-weight": "-100"
     # Keep the DaemonSet after hook completes (delete-policy options: before-hook-creation, hook-succeeded, hook-failed)
-    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-delete-policy": before-hook-creation, hook-succeeded
 spec:
   selector:
     matchLabels:
@@ -20,6 +20,9 @@ spec:
       labels:
         app: image-prepuller
     spec:
+      # Add tolerations to run on all nodes
+      tolerations:
+        - operator: Exists
       initContainers:
         # Prepull slowest images first (54s+)
         - name: prepull-supavisor

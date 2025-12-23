@@ -24,6 +24,13 @@ spec:
             - -c
             - |
               until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
       containers:
         - args:
             - postgrest
@@ -43,6 +50,7 @@ spec:
             - name: PGRST_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
           image: postgrest/postgrest:v12.2.12
+          imagePullPolicy: IfNotPresent
           name: supabase-rest
           ports:
             - containerPort: 3000

@@ -24,6 +24,13 @@ spec:
             - -c
             - |
               until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
       containers:
         - env:
             - name: AUTH_JWT_SECRET
@@ -42,7 +49,7 @@ spec:
               value: 'true'
             - name: OPENAI_API_KEY
               value: {{ .Values.envMap.OPENAI_API_KEY.value | quote }}
-            - name: POSTGRES_PASSWORD
+            # - name: POSTGRES_PASSWORD
               value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: STUDIO_PG_META_URL
               value: {{ .Values.envMap.META_INTERNAL_URL.value | quote }}
@@ -56,13 +63,6 @@ spec:
               value: {{ .Values.envMap.KONG_INTERNAL_URL.value | quote }}
           image: supabase/studio:2025.06.30-sha-6f5982d
           imagePullPolicy: IfNotPresent
-          # livenessProbe:
-          #   httpGet:
-          #     path: /api/platform/profile
-          #     port: 3000
-          #   failureThreshold: 3
-          #   periodSeconds: 5
-          #   timeoutSeconds: 10
           name: supabase-studio
           ports:
             - containerPort: 3000

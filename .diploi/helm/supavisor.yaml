@@ -26,6 +26,13 @@ spec:
             - -c
             - |
               until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "10m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
       containers:
         - args:
             - /bin/sh
@@ -67,18 +74,7 @@ spec:
             - name: VAULT_ENC_KEY
               value: {{ .Values.envMap.VAULT_ENC_KEY.value | quote }}
           image: supabase/supavisor:2.5.7
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #       - curl
-          #       - -sSfL
-          #       - --head
-          #       - -o
-          #       - /dev/null
-          #       - http://127.0.0.1:4000/api/health
-          #   failureThreshold: 5
-          #   periodSeconds: 10
-          #   timeoutSeconds: 5
+          imagePullPolicy: IfNotPresent
           name: supabase-pooler
           ports:
             - containerPort: 5432
