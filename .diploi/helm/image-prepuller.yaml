@@ -10,7 +10,7 @@ metadata:
     # Weight determines order (lower runs first)
     "helm.sh/hook-weight": "-100"
     # Keep the DaemonSet after hook completes (delete-policy options: before-hook-creation, hook-succeeded, hook-failed)
-    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   selector:
     matchLabels:
@@ -26,6 +26,15 @@ spec:
       restartPolicy: Always
       initContainers:
         # Prepull slowest images first (54s+)
+        - name: prepull-postgres
+          image: supabase/postgres:15.8.1.060
+          imagePullPolicy: IfNotPresent
+          command: ['sh', '-c', 'echo "Prepulled postgres image"']
+          resources:
+            limits:
+              cpu: 50m
+              memory: 64Mi
+
         - name: prepull-supavisor
           image: supabase/supavisor:2.5.7
           imagePullPolicy: IfNotPresent
@@ -39,15 +48,6 @@ spec:
           image: supabase/studio:2025.06.30-sha-6f5982d
           imagePullPolicy: IfNotPresent
           command: ['sh', '-c', 'echo "Prepulled studio image"']
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-        
-        - name: prepull-postgres
-          image: supabase/postgres:15.8.1.060
-          imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled postgres image"']
           resources:
             limits:
               cpu: 50m
@@ -90,24 +90,6 @@ spec:
               cpu: 50m
               memory: 64Mi
         
-        - name: prepull-realtime
-          image: supabase/realtime:v2.34.47
-          imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled realtime image"']
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-        
-        - name: prepull-kong
-          image: kong:2.8.1
-          imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled kong image"']
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-      
       containers:
         - name: pause
           image: gcr.io/google_containers/pause:3.2
