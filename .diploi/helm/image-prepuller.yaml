@@ -1,16 +1,9 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: supabase-image-prepuller
+  name: image-prepuller-concurrent
   labels:
     app: image-prepuller
-  annotations:
-    # Run before any other resources are created/upgraded
-    "helm.sh/hook": pre-install,pre-upgrade
-    # Weight determines order (lower runs first)
-    "helm.sh/hook-weight": "-100"
-    # Keep the DaemonSet after hook completes (delete-policy options: before-hook-creation, hook-succeeded, hook-failed)
-    "helm.sh/hook-delete-policy": before-hook-creation
 spec:
   selector:
     matchLabels:
@@ -20,80 +13,43 @@ spec:
       labels:
         app: image-prepuller
     spec:
-      # Add tolerations to run on all nodes
       tolerations:
         - operator: Exists
-      restartPolicy: Always
-      initContainers:
-        # Prepull slowest images first (54s+)
-        - name: prepull-postgres
+
+      # IMPORTANT: normal containers pull concurrently
+      containers:
+        - name: pull-postgres
           image: supabase/postgres:15.8.1.060
           imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled postgres image"']
+          command: ["sh", "-c", "echo 'postgres pulled'; sleep 3600"]
           resources:
             limits:
               cpu: 50m
               memory: 64Mi
 
-        - name: prepull-supavisor
-          image: supabase/supavisor:2.5.7
-          imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled supavisor image"']
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-        
-        - name: prepull-studio
+        - name: pull-studio
           image: supabase/studio:2025.06.30-sha-6f5982d
           imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled studio image"']
+          command: ["sh", "-c", "echo 'studio pulled'; sleep 3600"]
           resources:
             limits:
               cpu: 50m
               memory: 64Mi
-        
-        - name: prepull-functions
-          image: {{ .Values.images.functions }}
+
+        - name: pull-realtime
+          image: supabase/realtime:v2.34.47
           imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled functions image"']
+          command: ["sh", "-c", "echo 'realtime pulled'; sleep 3600"]
           resources:
             limits:
               cpu: 50m
               memory: 64Mi
-        
-        - name: prepull-postgres-meta
-          image: supabase/postgres-meta:v0.91.0
-          imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled postgres-meta image"']
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-        
-        # Medium speed images (23-32s)
-        - name: prepull-storage-api
+
+        - name: pull-storage
           image: supabase/storage-api:v1.25.7
           imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled storage-api image"']
+          command: ["sh", "-c", "echo 'storage pulled'; sleep 3600"]
           resources:
             limits:
               cpu: 50m
               memory: 64Mi
-        
-        - name: prepull-postgrest
-          image: postgrest/postgrest:v12.2.12
-          imagePullPolicy: IfNotPresent
-          command: ['sh', '-c', 'echo "Prepulled postgrest image"']
-          resources:
-            limits:
-              cpu: 50m
-              memory: 64Mi
-        
-      containers:
-        - name: pause
-          image: gcr.io/google_containers/pause:3.2
-          resources:
-            limits:
-              cpu: 10m
-              memory: 16Mi
