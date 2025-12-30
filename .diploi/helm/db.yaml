@@ -26,14 +26,6 @@ spec:
         volumeMounts:
           - name: pgsodium-mount
             mountPath: /etc/postgresql-custom
-        resources:
-          requests:
-            memory: "32Mi"
-            cpu: "10m"
-          limits:
-            memory: "64Mi"
-            cpu: "100m"
-
       containers:
         - args:
             - postgres
