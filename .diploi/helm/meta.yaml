@@ -16,14 +16,14 @@ spec:
     spec:
       restartPolicy: Always
       initContainers:
-        - name: wait-for-db-and-analytics
+        - name: wait-for-db
           image: busybox
+          imagePullPolicy: IfNotPresent
           command:
             - sh
             - -c
             - |
-              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
-              until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
       containers:
         - env:
             - name: PG_META_DB_HOST
@@ -39,6 +39,7 @@ spec:
             - name: PG_META_PORT
               value: '8080'
           image: supabase/postgres-meta:v0.91.0
+          imagePullPolicy: IfNotPresent
           name: supabase-meta
           ports:
             - containerPort: 8080

@@ -18,7 +18,12 @@ spec:
       initContainers:
         - name: wait-for-db
           image: busybox
-          command: ['sh', '-c', 'until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;']
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
       containers:
         - env:
             - name: DB_DATABASE
@@ -52,14 +57,7 @@ spec:
             - name: POSTGRES_BACKEND_URL
               value: "postgresql://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/_supabase"
           image: supabase/logflare:1.14.2
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #       - curl
-          #       - http://localhost:4000/health
-          #   failureThreshold: 10
-          #   periodSeconds: 5
-          #   timeoutSeconds: 5
+          imagePullPolicy: IfNotPresent
           name: supabase-analytics
           ports:
             - containerPort: 4000

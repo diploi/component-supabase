@@ -17,13 +17,6 @@ spec:
         app: kong
     spec:
       restartPolicy: Always
-      initContainers:
-        - name: wait-for-analytics
-          image: busybox
-          command:
-            - sh
-            - -c
-            - until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
       containers:
         - env:
             - name: KONG_DATABASE
@@ -39,6 +32,7 @@ spec:
             - name: KONG_PLUGINS
               value: 'request-transformer,cors,key-auth,acl,request-termination,jwt'
           image: kong:2.8.1
+          imagePullPolicy: IfNotPresent
           name: supabase-kong
           ports:
             - containerPort: 8000

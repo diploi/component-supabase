@@ -18,15 +18,14 @@ spec:
     spec:
       restartPolicy: Always
       initContainers:
-        - name: wait-for-db-rest-and-imgproxy
+        - name: wait-for-db
           image: busybox
+          imagePullPolicy: IfNotPresent
           command:
             - sh
             - -c
             - |
-              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
-              until nc -z rest 3000; do echo waiting for rest; sleep 2; done;
-              until nc -z imgproxy 5001; do echo waiting for imgproxy; sleep 2; done;
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
       containers:
         - env:
             - name: ANON_KEY
@@ -56,17 +55,7 @@ spec:
             - name: TENANT_ID
               value: stub
           image: supabase/storage-api:v1.25.7
-          # livenessProbe:
-          #   exec:
-          #     command:
-          #       - wget
-          #       - --no-verbose
-          #       - --tries=1
-          #       - --spider
-          #       - {{ .Values.envMap.STORAGE_INTERNAL_URL.value | quote }}
-          #   failureThreshold: 3
-          #   periodSeconds: 5
-          #   timeoutSeconds: 5
+          imagePullPolicy: IfNotPresent
           name: supabase-storage
           ports:
             - containerPort: 5000

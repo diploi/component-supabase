@@ -16,14 +16,14 @@ spec:
     spec:
       restartPolicy: Always
       initContainers:
-        - name: wait-for-db-and-analytics
+        - name: wait-for-db
           image: busybox
+          imagePullPolicy: IfNotPresent
           command:
             - sh
             - -c
             - |
-              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 2; done;
-              until nc -z analytics 4000; do echo waiting for analytics; sleep 2; done;
+              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
       containers:
         - args:
             - postgrest
@@ -43,6 +43,7 @@ spec:
             - name: PGRST_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
           image: postgrest/postgrest:v12.2.12
+          imagePullPolicy: IfNotPresent
           name: supabase-rest
           ports:
             - containerPort: 3000
