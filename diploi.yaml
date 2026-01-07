@@ -139,6 +139,11 @@ parameterGroups:
         identifier: POSTGRES_DB
         defaultValue: supabase
         type: string
+      - name: Cron Database
+        identifier: POSTGRESQL_CRON_DATABASE_NAME
+        defaultValue: supabase
+        type: string
+    value: "supabase"
   - name: OpenAI
     identifier: openai
     description: Add your OpenAI API key to enable SQL Editor Assistant
