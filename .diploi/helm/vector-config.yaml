@@ -167,7 +167,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=gotrue.logs.prod'
       logflare_realtime:
         type: 'http'
@@ -179,7 +179,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=realtime.logs.prod'
       logflare_rest:
         type: 'http'
@@ -191,7 +191,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=postgREST.logs.prod'
       logflare_db:
         type: 'http'
@@ -203,7 +203,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}'
         # We must route the sink through kong because ingesting logs before logflare is fully initialised will
         # lead to broken queries from studio. This works by the assumption that containers are started in the
         # following order: vector > db > logflare > kong
@@ -218,7 +218,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=deno-relay-logs'
       logflare_storage:
         type: 'http'
@@ -230,7 +230,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=storage.logs.prod.2'
       logflare_kong:
         type: 'http'
@@ -243,5 +243,5 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value | quote }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=cloudflare.logs.prod'
