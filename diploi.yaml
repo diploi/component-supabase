@@ -128,7 +128,7 @@ parameterGroups:
         type: integer
       - name: User
         identifier: POSTGRES_USER
-        defaultValue: postgres
+        defaultValue: supabase_admin
         type: string
         contexts: label=postgres,label=app
       - name: Password
@@ -139,11 +139,6 @@ parameterGroups:
         identifier: POSTGRES_DB
         defaultValue: postgres
         type: string
-      - name: Cron Database
-        identifier: POSTGRESQL_CRON_DATABASE_NAME
-        defaultValue: supabase
-        type: string
-    value: "supabase"
   - name: OpenAI
     identifier: openai
     description: Add your OpenAI API key to enable SQL Editor Assistant
