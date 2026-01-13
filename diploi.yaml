@@ -137,7 +137,7 @@ parameterGroups:
         type: secret
       - name: Database
         identifier: POSTGRES_DB
-        defaultValue: supabase
+        defaultValue: postgres
         type: string
       - name: Cron Database
         identifier: POSTGRESQL_CRON_DATABASE_NAME
