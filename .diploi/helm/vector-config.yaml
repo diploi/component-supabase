@@ -11,7 +11,7 @@ data:
     sources:
       kubernetes_host:
         type: kubernetes_logs
-        namespace: "supabase"
+        extra_namespace_label_selector: kubernetes.io/metadata.name=supabase
         extra_label_selector: app=analytics, app=db, app=functions, app=imgproxy, app=realtime, app=rest, app=storage, app=studio, app=supavisor, app!=vector
 
     transforms:
