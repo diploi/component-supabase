@@ -6,7 +6,7 @@ data:
   vector.yml: |
     api:
       enabled: true
-      address: http://vector.supabase:9001
+      address: 0.0.0.0:9001
 
     sources:
       kubernetes_host:
