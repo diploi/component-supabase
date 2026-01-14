@@ -128,7 +128,7 @@ parameterGroups:
         type: integer
       - name: User
         identifier: POSTGRES_USER
-        defaultValue: supabase_admin
+        defaultValue: postgres
         type: string
         contexts: label=postgres,label=app
       - name: Password
