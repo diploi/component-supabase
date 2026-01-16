@@ -52,7 +52,7 @@ spec:
               value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: POSTGRES_PORT
               value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
-          image: supabase/postgres:15.8.1.060
+          image: supabase/postgres:15.8.1.085
           imagePullPolicy: IfNotPresent
           name: supabase-db
           ports:
