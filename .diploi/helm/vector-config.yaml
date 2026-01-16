@@ -13,6 +13,7 @@ data:
         type: kubernetes_logs
         extra_namespace_label_selector: kubernetes.io/metadata.name=supabase
         extra_label_selector: app!=vector,app
+        log_format: cri
 
     transforms:
       project_logs:
