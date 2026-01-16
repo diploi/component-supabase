@@ -13,13 +13,27 @@ data:
         type: kubernetes_logs
         extra_namespace_label_selector: kubernetes.io/metadata.name=supabase
         extra_label_selector: app!=vector,app
-        log_format: cri
 
     transforms:
-      project_logs:
+      kubernetes_unwrap:
         type: remap
         inputs:
           - kubernetes_host
+        source: |-
+          # k3s/containerd writes CRI log lines:
+          # <ts> <stream> <flag> <message>
+          parsed, err = parse_regex(.message, r'^(?P<ts>[^ ]+) (?P<stream>stdout|stderr) (?P<flag>[^ ]+) (?P<msg>.*)$')
+
+          if err == null && parsed != null {
+            .timestamp = parse_timestamp!(parsed.ts, format: "%+")
+            .stream = parsed.stream
+            .message = parsed.msg
+          }
+
+      project_logs:
+        type: remap
+        inputs:
+          - kubernetes_unwrap
         source: |-
           .project = "default"
           .event_message = del(.message)
@@ -40,6 +54,7 @@ data:
           storage: '.appname == "supabase-storage"'
           functions: '.appname == "supabase-functions"'
           db: '.appname == "supabase-db"'
+
       # Ignores non nginx errors since they are related with kong booting up
       kong_logs:
         type: remap
