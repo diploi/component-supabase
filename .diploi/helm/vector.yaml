@@ -47,7 +47,6 @@ spec:
             - mountPath: /etc/vector/vector.yml
               subPath: vector.yml
               name: vector-config
-              readOnly: true
             - name: varlog
               mountPath: /var/log
               readOnly: true
