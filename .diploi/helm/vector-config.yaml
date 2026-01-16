@@ -12,7 +12,7 @@ data:
       kubernetes_host:
         type: kubernetes_logs
         extra_namespace_label_selector: kubernetes.io/metadata.name=supabase
-        extra_label_selector: app=analytics, app=db, app=functions, app=imgproxy, app=realtime, app=rest, app=storage, app=studio, app=supavisor, app!=vector
+        extra_label_selector: app!=vector
 
     transforms:
       project_logs:
@@ -157,7 +157,21 @@ data:
           }
           .metadata.parsed.error_severity = upcase!(.metadata.parsed.error_severity)
 
+      # Function logs are unstructured messages on stderr
+      functions_logs:
+        type: remap
+        inputs:
+          - router.functions
+        source: |-
+          .metadata.project_ref = del(.project)
+
     sinks:
+      debug_console:
+        type: console
+        inputs:
+          - kubernetes_host
+        encoding:
+          codec: text
       logflare_auth:
         type: 'http'
         inputs:
@@ -212,7 +226,7 @@ data:
       logflare_functions:
         type: 'http'
         inputs:
-          - router.functions
+          - functions_logs
         encoding:
           codec: 'json'
         method: 'post'

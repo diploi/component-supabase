@@ -48,19 +48,19 @@ spec:
               subPath: vector.yml
               name: vector-config
               readOnly: true
-            - mountPath: /var/log/containers
-              name: logscontainers
+            - name: varlog
+              mountPath: /var/log
               readOnly: true
-            - mountPath: /var/log/pods
-              name: logpods
+            - name: varlibdockercontainers
+              mountPath: /var/lib/docker/containers
               readOnly: true
       volumes:
         - name: vector-config
           configMap:
             name: vector-config
-        - name: logscontainers
-          hostPath:
-            path: /var/log/containers
-        - name: logpods
-          hostPath:
-            path: /var/log/pods
+        - name: varlog
+          mountPath: /var/log
+          readOnly: true
+        - name: varlibdockercontainers
+          mountPath: /var/lib/docker/containers
+          readOnly: true
