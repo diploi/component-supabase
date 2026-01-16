@@ -51,16 +51,11 @@ spec:
             - name: varlog
               mountPath: /var/log
               readOnly: true
-            - name: varlibdockercontainers
-              mountPath: /var/lib/docker/containers
-              readOnly: true
       volumes:
         - name: vector-config
           configMap:
             name: vector-config
         - name: varlog
-          mountPath: /var/log
-          readOnly: true
-        - name: varlibdockercontainers
-          mountPath: /var/lib/docker/containers
+          hostPath:
+            path: /var/log
           readOnly: true

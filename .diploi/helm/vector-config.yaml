@@ -12,7 +12,7 @@ data:
       kubernetes_host:
         type: kubernetes_logs
         extra_namespace_label_selector: kubernetes.io/metadata.name=supabase
-        extra_label_selector: app!=vector
+        extra_label_selector: app!=vector,app
 
     transforms:
       project_logs:
