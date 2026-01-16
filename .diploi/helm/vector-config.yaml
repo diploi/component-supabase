@@ -33,7 +33,7 @@ data:
       project_logs:
         type: remap
         inputs:
-          - kubernetes_unwrap
+          - kubernetes_host
         source: |-
           .project = "default"
           .event_message = del(.message)
