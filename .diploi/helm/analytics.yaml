@@ -43,7 +43,7 @@ spec:
             - name: LOGFLARE_MIN_CLUSTER_SIZE
               value: '1'
             - name: LOGFLARE_NODE_HOST
-              value: 0.0.0.0
+              value: 127.0.0.1
             - name: LOGFLARE_PRIVATE_ACCESS_TOKEN
               value: {{ .Values.envMap.LOGFLARE_PRIVATE_ACCESS_TOKEN.value | quote }}
             - name: LOGFLARE_PUBLIC_ACCESS_TOKEN
