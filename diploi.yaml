@@ -137,7 +137,7 @@ parameterGroups:
         type: secret
       - name: Database
         identifier: POSTGRES_DB
-        defaultValue: supabase
+        defaultValue: postgres
         type: string
   - name: OpenAI
     identifier: openai

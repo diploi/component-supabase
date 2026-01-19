@@ -28,7 +28,9 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          image: timberio/vector:0.28.1-alpine
+            - name: VECTOR_LOG
+              value: debug
+          image: timberio/vector:0.36.0-alpine
           # livenessProbe:
           #   exec:
           #     command:
@@ -47,14 +49,14 @@ spec:
             - mountPath: /etc/vector/vector.yml
               subPath: vector.yml
               name: vector-config
-              readOnly: true
-            - mountPath: /var/log/pods
-              name: kubernetes-logs
+            - name: varlog
+              mountPath: /var/log
               readOnly: true
       volumes:
         - name: vector-config
           configMap:
             name: vector-config
-        - name: kubernetes-logs
+        - name: varlog
           hostPath:
-            path: /var/log/pods
+            path: /var/log
+          readOnly: true

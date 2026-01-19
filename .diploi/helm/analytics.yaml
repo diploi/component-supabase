@@ -56,7 +56,7 @@ spec:
               value: _analytics
             - name: POSTGRES_BACKEND_URL
               value: "postgresql://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/_supabase"
-          image: supabase/logflare:1.14.2
+          image: supabase/logflare:1.28.0
           imagePullPolicy: IfNotPresent
           name: supabase-analytics
           ports:

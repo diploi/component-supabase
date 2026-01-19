@@ -54,7 +54,7 @@ spec:
               value: {{ .Values.envMap.SERVICE_ROLE_KEY.value | quote }}
             - name: SUPABASE_URL
               value: {{ .Values.envMap.KONG_INTERNAL_URL.value | quote }}
-          image: supabase/studio:2025.06.30-sha-6f5982d
+          image: supabase/studio:2026.01.12-sha-4e9b718
           imagePullPolicy: IfNotPresent
           name: supabase-studio
           ports:

@@ -11,13 +11,29 @@ data:
     sources:
       kubernetes_host:
         type: kubernetes_logs
-        extra_label_selector: app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/name!=vector
+        extra_namespace_label_selector: kubernetes.io/metadata.name=supabase
+        extra_label_selector: app!=vector,app
 
     transforms:
-      project_logs:
+      kubernetes_unwrap:
         type: remap
         inputs:
           - kubernetes_host
+        source: |-
+          # k3s/containerd writes CRI log lines:
+          # <ts> <stream> <flag> <message>
+          parsed, err = parse_regex(.message, r'^(?P<ts>[^ ]+) (?P<stream>stdout|stderr) (?P<flag>[^ ]+) (?P<msg>.*)$')
+
+          if err == null && parsed != null {
+            .timestamp = parse_timestamp!(parsed.ts, format: "%+")
+            .stream = parsed.stream
+            .message = parsed.msg
+          }
+
+      project_logs:
+        type: remap
+        inputs:
+          - kubernetes_unwrap
         source: |-
           .project = "default"
           .event_message = del(.message)
@@ -38,6 +54,7 @@ data:
           storage: '.appname == "supabase-storage"'
           functions: '.appname == "supabase-functions"'
           db: '.appname == "supabase-db"'
+
       # Ignores non nginx errors since they are related with kong booting up
       kong_logs:
         type: remap
@@ -102,7 +119,7 @@ data:
           parsed, err = parse_regex(.event_message, r'^(?P<time>.*): (?P<msg>.*)$')
           if err == null {
               .event_message = parsed.msg
-              .timestamp = parse_timestamp!(parsed.time, format: "%e/%b/%Y %R %:z")
+              .timestamp = parse_timestamp!(parsed.time, format: "%d/%b/%Y:%T %z")
               .metadata.host = .project
           }
       # Realtime logs are structured so we parse the severity level using regex (ignore time because it has no date)
@@ -156,7 +173,21 @@ data:
           }
           .metadata.parsed.error_severity = upcase!(.metadata.parsed.error_severity)
 
+      # Function logs are unstructured messages on stderr
+      functions_logs:
+        type: remap
+        inputs:
+          - router.functions
+        source: |-
+          .metadata.project_ref = del(.project)
+
     sinks:
+      debug_console:
+        type: console
+        inputs:
+          - kubernetes_host
+        encoding:
+          codec: text
       logflare_auth:
         type: 'http'
         inputs:
@@ -167,7 +198,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=gotrue.logs.prod'
       logflare_realtime:
         type: 'http'
@@ -179,7 +210,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=realtime.logs.prod'
       logflare_rest:
         type: 'http'
@@ -191,7 +222,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=postgREST.logs.prod'
       logflare_db:
         type: 'http'
@@ -203,7 +234,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value }}'
         # We must route the sink through kong because ingesting logs before logflare is fully initialised will
         # lead to broken queries from studio. This works by the assumption that containers are started in the
         # following order: vector > db > logflare > kong
@@ -211,14 +242,14 @@ data:
       logflare_functions:
         type: 'http'
         inputs:
-          - router.functions
+          - functions_logs
         encoding:
           codec: 'json'
         method: 'post'
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=deno-relay-logs'
       logflare_storage:
         type: 'http'
@@ -230,7 +261,7 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=storage.logs.prod.2'
       logflare_kong:
         type: 'http'
@@ -243,5 +274,5 @@ data:
         request:
           retry_max_duration_secs: 10
           headers:
-            x-api-key: ${LOGFLARE_PUBLIC_ACCESS_TOKEN?LOGFLARE_PUBLIC_ACCESS_TOKEN is required}
+            x-api-key: '{{ .Values.envMap.LOGFLARE_PUBLIC_ACCESS_TOKEN.value }}'
         uri: '{{ .Values.envMap.ANALYTICS_INTERNAL_URL.value }}/api/logs?source_name=cloudflare.logs.prod'
