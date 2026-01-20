@@ -92,7 +92,7 @@ spec:
 
               if [ -d /home/deno/migrations ] && [ "$(ls -A /home/deno/migrations)" ]; then
                 echo "Applying Supabase migrations..."
-                (cd /home/deno && supabase migration up)
+                (cd /home/deno && supabase migration up --db-url "$SUPABASE_DB_URL")
               else
                 echo "No migrations found, skipping."
               fi
