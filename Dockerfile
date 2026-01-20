@@ -18,10 +18,11 @@ RUN apt-get update \
 
 COPY . /app
 
-# Copy the Supabase folder over to the correct location
-RUN mkdir -p /home/deno/functions
-RUN mkdir -p /home/deno/migrations
-RUN cp --verbose -R ${FOLDER}/. /home/deno
+# Copy the Supabase /functions, /migrations and seed.sql over to the correct locations
+RUN mkdir -p /home/deno/functions /home/deno/migrations \
+ && if [ -d "${FOLDER}/functions" ]; then cp --verbose -R "${FOLDER}/functions/." /home/deno/functions; fi \
+ && if [ -d "${FOLDER}/migrations" ]; then cp --verbose -R "${FOLDER}/migrations/." /home/deno/migrations; fi \
+ && if [ -f "${FOLDER}/seed.sql" ]; then cp --verbose "${FOLDER}/seed.sql" /home/deno/seed.sql; fi
 
 RUN chown -R 1000:1000 /home/deno
 RUN rm -rf /app
