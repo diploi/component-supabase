@@ -30,7 +30,11 @@ spec:
             - name: SUPABASE_DISABLE_TELEMETRY
               value: "1"
           command:
-            - sh
+            - bash
+            - -e
+            - -u
+            - -o
+            - pipefail
             - -c
             - |
               set -euo pipefail
