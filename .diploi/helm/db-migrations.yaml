@@ -24,7 +24,7 @@ spec:
           imagePullPolicy: IfNotPresent
           env:
             - name: SUPABASE_DB_URL
-              value: "postgresql://{{ .Values.envMap.POSTGRES_USER.value }}:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
+              value: "postgres://{{ .Values.envMap.POSTGRES_USER.value }}:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
             - name: PGSSLMODE
               value: disable
             - name: SUPABASE_DISABLE_TELEMETRY
@@ -40,13 +40,15 @@ spec:
               set -euo pipefail
 
               echo "Attempting Supabase CLI connection using $SUPABASE_DB_URL"
+              export SUPABASE_DB_URL
+
               echo "Waiting for database to accept connections..."
-              until supabase db execute --db-url "$SUPABASE_DB_URL" --command "select 1;" >/dev/null 2>&1; do
+              until supabase db execute --command "select 1;" >/dev/null 2>&1; do
                 echo "Database not ready yet, retrying in 2s..."
                 sleep 2
               done
 
-              PRE_MIGRATION_TABLE_EXISTS=$(supabase db execute --db-url "$SUPABASE_DB_URL" --command "\\pset format unaligned \\pset tuples_only select count(*) from information_schema.tables where table_schema = 'supabase_migrations' and table_name = 'schema_migrations';" | tr -d '[:space:]')
+              PRE_MIGRATION_TABLE_EXISTS=$(supabase db execute --command "\\pset format unaligned \\pset tuples_only select count(*) from information_schema.tables where table_schema = 'supabase_migrations' and table_name = 'schema_migrations';" | tr -d '[:space:]')
               PRE_MIGRATION_TABLE_EXISTS=${PRE_MIGRATION_TABLE_EXISTS:-0}
 
 {{- if eq .Values.stage "development" }}
@@ -59,7 +61,7 @@ spec:
 
               if [ -d /home/deno/migrations ] && [ "$(ls -A /home/deno/migrations)" ]; then
                 echo "Applying Supabase migrations..."
-                supabase migration up --db-url "$SUPABASE_DB_URL" --migration-dir /home/deno/migrations
+                supabase migration up --migration-dir /home/deno/migrations
               else
                 echo "No migrations found, skipping."
               fi
@@ -67,7 +69,7 @@ spec:
               if [ -f /home/deno/seed.sql ]; then
                 if [ "$PRE_MIGRATION_TABLE_EXISTS" != "1" ]; then
                   echo "Executing seed.sql for initial setup..."
-                  supabase db execute --db-url "$SUPABASE_DB_URL" --file /home/deno/seed.sql
+                  supabase db execute --file /home/deno/seed.sql
                 else
                   echo "Migrations table already existed; skipping seed.sql."
                 fi
