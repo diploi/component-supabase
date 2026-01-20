@@ -12,13 +12,13 @@ Based on the official [supabase/docker](https://github.com/supabase/supabase/tre
 
 ## Operation
 
-A full Supabase implementation.
+A full Supabase self-hosted implementation.
 
 ### Limitations
 
 We know of a few limitations that currently exist with Supabase on Diploi. We are actively working on fixes.
+
 - Connection URI's dislayed on Supabase Studio are wrong, please use the ones on Diploi Console
-- Logs view on Supabase Studio is empty, please use the logging functionality built-in to Diploi
 
 ### Authentication
 
@@ -29,8 +29,23 @@ You can find the admin credentials from a deployments "Options" tab in the Diplo
 
 ### Development
 
+#### Functions
+
 You can develop custom functions with [Deno](https://deno.com/).
-We will create a `/functions` directory for you with a preconfigured `main` function and an example `hello` function.
+Diploi automatically creates a `/functions` directory for you with a preconfigured `main` function and an example `hello` function.
+
+#### Migrations
+
+Database migrations and seeding are supported.
+
+Diploi automatically creates a `/migrations` directory and a `seed.sql` file for you.
+These work together with the Supabase CLI to manage schema changes and database seeding in a robust, repeatable way.
+
+For a guide and best practices, see the [official Supabase docs on database migrations](https://supabase.com/docs/guides/deployment/database-migrations).
+
+> [!IMPORTANT]  
+> Migrations are run automatically in **staging** and **production** deployments.
+> In **development**, you use the Supabase CLI to create and run migrations.
 
 ## Links
 
