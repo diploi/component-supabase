@@ -18,7 +18,7 @@ A full Supabase self-hosted implementation.
 
 We know of a few limitations that currently exist with Supabase on Diploi. We are actively working on fixes.
 
-- Connection URI's dislayed on Supabase Studio are wrong, please use the ones on Diploi Console
+- Connection URI's displayed on Supabase Studio are wrong, please use the ones on Diploi Console
 
 ### Authentication
 
