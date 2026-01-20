@@ -39,6 +39,7 @@ spec:
             - |
               set -euo pipefail
 
+              echo "Attempting Supabase CLI connection using $SUPABASE_DB_URL"
               echo "Waiting for database to accept connections..."
               until supabase db execute --db-url "$SUPABASE_DB_URL" --command "select 1;" >/dev/null 2>&1; do
                 echo "Database not ready yet, retrying in 2s..."
