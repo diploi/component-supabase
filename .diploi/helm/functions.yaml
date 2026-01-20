@@ -67,6 +67,14 @@ spec:
           volumeMounts:
             - name: migration-state
               mountPath: /migration-state
+            {{- if hasKey .Values.storage "code" }}
+            - mountPath: /home/deno/functions
+              name: functions-mount
+            - mountPath: /home/deno/supabase/migrations
+              name: migrations-mount
+            - mountPath: /home/deno/supabase/seed.sql
+              name: seed-mount
+            {{- end }}
           command:
             - bash
             - -e
@@ -92,17 +100,17 @@ spec:
               fi
 {{- end }}
 
-              if [ -d /home/deno/migrations ] && [ "$(ls -A /home/deno/migrations)" ]; then
+              if [ -d /home/deno/supabase/migrations ] && [ "$(ls -A /home/deno/supabase/migrations)" ]; then
                 echo "Applying Supabase migrations..."
                 (cd /home/deno && supabase migration up --db-url "$SUPABASE_DB_URL")
               else
                 echo "No migrations found, skipping."
               fi
 
-              if [ -f /home/deno/seed.sql ]; then
+              if [ -f /home/deno/supabase/seed.sql ]; then
                 if [ "$PRE_MIGRATION_TABLE_EXISTS" != "1" ]; then
                   echo "Flagging seed.sql for initial execution via DB image..."
-                  cp /home/deno/seed.sql /migration-state/seed.sql
+                  cp /home/deno/supabase/seed.sql /migration-state/seed.sql
                   RUN_SEED_FLAG="1"
                 else
                   echo "Migrations table already existed; skipping seed.sql."
@@ -177,6 +185,10 @@ spec:
             {{- if hasKey .Values.storage "code" }}
             - mountPath: /home/deno/functions
               name: functions-mount
+            - mountPath: /home/deno/supabase/migrations
+              name: migrations-mount
+            - mountPath: /home/deno/supabase/seed.sql
+              name: seed-mount
             {{- end }}
       volumes:
         - name: migration-state
@@ -184,5 +196,14 @@ spec:
         {{- if hasKey .Values.storage "code" }}
         - name: functions-mount
           hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/functions"
+            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/supabase/functions"
+            type: Directory
+        - name: migrations-mount
+          hostPath:
+            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/supabase/migrations"
+            type: Directory
+        - name: seed-mount
+          hostPath:
+            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/supabase/seed.sql"
+            type: File
         {{- end }}
