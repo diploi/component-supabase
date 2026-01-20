@@ -60,6 +60,8 @@ spec:
               value: "postgres://{{ .Values.envMap.POSTGRES_USER.value }}:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
             - name: PGSSLMODE
               value: disable
+            - name: SUPABASE_MIGRATIONS_DIR
+              value: "/home/deno/migrations"
             - name: SUPABASE_DISABLE_TELEMETRY
               value: "1"
           volumeMounts:
