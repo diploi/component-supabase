@@ -74,7 +74,6 @@ spec:
               name: migrations-mount
             - mountPath: /home/deno/supabase/seed.sql
               name: seed-mount
-              subPath: seed.sql
             {{- end }}
           command:
             - bash
