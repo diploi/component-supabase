@@ -39,13 +39,13 @@ Diploi automatically creates a `/functions` directory for you with a preconfigur
 Database migrations and seeding are supported.
 
 Diploi automatically creates a `/migrations` directory and a `seed.sql` file for you.
-These work together with the Supabase CLI to manage schema changes and database seeding in a robust, repeatable way.
+They work with the Supabase CLI to manage schema changes and database seeding in a repeatable way.
 
-For a guide and best practices, see the [official Supabase docs on database migrations](https://supabase.com/docs/guides/deployment/database-migrations).
+For guidance and best practices, see the [official Supabase docs on database migrations](https://supabase.com/docs/guides/deployment/database-migrations).
 
 > [!IMPORTANT]  
 > Migrations are run automatically in **staging** and **production** deployments.
-> In **development**, you use the Supabase CLI to create and run migrations.
+> In **development**, use the Supabase CLI to create and run migrations.
 
 ## Links
 
@@ -53,3 +53,4 @@ For a guide and best practices, see the [official Supabase docs on database migr
 - [Supabase documentation](https://supabase.com/docs)
 - [Self-Hosting Supabase with Docker](https://supabase.com/docs/guides/self-hosting/docker)
 - [Generate Supabase API keys](https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+- [Migrations with Supabase CLI](https://supabase.com/docs/guides/deployment/database-migrations)
