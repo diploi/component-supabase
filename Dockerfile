@@ -10,8 +10,8 @@ ARG SUPABASE_CLI_VERSION=2.72.7
 RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates curl \
  && curl -fLO https://github.com/supabase/cli/releases/download/v${SUPABASE_CLI_VERSION}/supabase_${SUPABASE_CLI_VERSION}_linux_arm64.deb \
- && dpkg -i supabase_${SUPABASE_CLI_VERSION}_linux_amd64.deb \
- && rm supabase_${SUPABASE_CLI_VERSION}_linux_amd64.deb \
+ && dpkg -i supabase_${SUPABASE_CLI_VERSION}_linux_arm64.deb \
+ && rm supabase_${SUPABASE_CLI_VERSION}_linux_arm64.deb \
  && apt-get purge -y curl \
  && apt-get autoremove -y \
  && rm -rf /var/lib/apt/lists/*
