@@ -27,23 +27,23 @@ spec:
       containers:
         - env:
             - name: API_EXTERNAL_URL
-              value: 'https://{{ .Values.hosts.app }}'
+              value: "https://{{ .Values.hosts.app }}"
             - name: GOTRUE_API_HOST
               value: '0.0.0.0'
             - name: GOTRUE_API_PORT
               value: '9999'
             - name: GOTRUE_DB_DATABASE_URL
-              value: 'postgresql://supabase_auth_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}'
+              value: "postgresql://supabase_auth_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
             - name: GOTRUE_DB_DRIVER
               value: postgres
             - name: GOTRUE_DISABLE_SIGNUP
-              value: { { .Values.envMap.DISABLE_SIGNUP.value | quote } }
+              value: {{ .Values.envMap.DISABLE_SIGNUP.value | quote }}
             - name: GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED
-              value: { { .Values.envMap.ENABLE_ANONYMOUS_USERS.value | quote } }
+              value: {{ .Values.envMap.ENABLE_ANONYMOUS_USERS.value | quote }}
             - name: GOTRUE_EXTERNAL_EMAIL_ENABLED
-              value: { { .Values.envMap.ENABLE_EMAIL_SIGNUP.value | quote } }
+              value: {{ .Values.envMap.ENABLE_EMAIL_SIGNUP.value | quote }}
             - name: GOTRUE_EXTERNAL_PHONE_ENABLED
-              value: { { .Values.envMap.ENABLE_PHONE_SIGNUP.value | quote } }
+              value: {{ .Values.envMap.ENABLE_PHONE_SIGNUP.value | quote }}
             - name: GOTRUE_JWT_ADMIN_ROLES
               value: service_role
             - name: GOTRUE_JWT_AUD
@@ -51,12 +51,11 @@ spec:
             - name: GOTRUE_JWT_DEFAULT_GROUP_NAME
               value: authenticated
             - name: GOTRUE_JWT_EXP
-              value: { { .Values.envMap.JWT_EXPIRY.value | quote } }
+              value: {{ .Values.envMap.JWT_EXPIRY.value | quote }}
             - name: GOTRUE_JWT_SECRET
-              value: { { .Values.envMap.JWT_SECRET.value | quote } }
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: GOTRUE_MAILER_AUTOCONFIRM
-              value:
-                { { .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM.value | quote } }
+              value: {{ .Values.envMap.ENABLE_EMAIL_AUTOCONFIRM.value | quote }}
             - name: GOTRUE_MAILER_URLPATHS_CONFIRMATION
               value: /auth/v1/verify
             - name: GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE
@@ -66,25 +65,23 @@ spec:
             - name: GOTRUE_MAILER_URLPATHS_RECOVERY
               value: /auth/v1/verify
             - name: GOTRUE_SITE_URL
-              value: { { .Values.envMap.SITE_URL.value | quote } }
+              value: {{ .Values.envMap.SITE_URL.value | quote }}
             - name: GOTRUE_SMS_AUTOCONFIRM
-              value:
-                { { .Values.envMap.ENABLE_PHONE_AUTOCONFIRM.value | quote } }
+              value: {{ .Values.envMap.ENABLE_PHONE_AUTOCONFIRM.value | quote }}
             - name: GOTRUE_SMTP_ADMIN_EMAIL
-              value: { { .Values.envMap.SMTP_ADMIN_EMAIL.value | quote } }
+              value: {{ .Values.envMap.SMTP_ADMIN_EMAIL.value | quote }}
             - name: GOTRUE_SMTP_HOST
-              value: { { .Values.envMap.SMTP_HOST.value | quote } }
+              value: {{ .Values.envMap.SMTP_HOST.value | quote }}
             - name: GOTRUE_SMTP_PASS
-              value: { { .Values.envMap.SMTP_PASS.value | quote } }
+              value: {{ .Values.envMap.SMTP_PASS.value | quote }}
             - name: GOTRUE_SMTP_PORT
-              value: { { .Values.envMap.SMTP_PORT.value | quote } }
+              value: {{ .Values.envMap.SMTP_PORT.value | quote }}
             - name: GOTRUE_SMTP_SENDER_NAME
-              value: { { .Values.envMap.SMTP_SENDER_NAME.value | quote } }
+              value: {{ .Values.envMap.SMTP_SENDER_NAME.value | quote }}
             - name: GOTRUE_SMTP_USER
-              value: { { .Values.envMap.SMTP_USER.value | quote } }
+              value: {{ .Values.envMap.SMTP_USER.value | quote }}
             - name: GOTRUE_URI_ALLOW_LIST
-              value:
-                { { .Values.envMap.ADDITIONAL_REDIRECT_URLS.value | quote } }
+              value: {{ .Values.envMap.ADDITIONAL_REDIRECT_URLS.value | quote }}
           image: supabase/gotrue:v2.185.0
           imagePullPolicy: IfNotPresent
           name: supabase-auth

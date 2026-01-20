@@ -33,17 +33,17 @@ spec:
             - /app/bin/migrate && /app/bin/supavisor eval "$(cat /etc/pooler/pooler.exs)" && /app/bin/server
           env:
             - name: API_JWT_SECRET
-              value: { { .Values.envMap.JWT_SECRET.value | quote } }
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: CLUSTER_POSTGRES
               value: 'true'
             - name: DATABASE_URL
-              value: 'ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/_supabase'
+              value: "ecto://supabase_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/_supabase"
             - name: DB_POOL_SIZE
               value: '5'
             - name: ERL_AFLAGS
               value: -proto_dist inet_tcp
             - name: METRICS_JWT_SECRET
-              value: { { .Values.envMap.JWT_SECRET.value | quote } }
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: POOLER_DEFAULT_POOL_SIZE
               value: '20'
             - name: POOLER_MAX_CLIENT_CONN
@@ -51,21 +51,21 @@ spec:
             - name: POOLER_POOL_MODE
               value: transaction
             - name: POOLER_TENANT_ID
-              value: { { .Values.envMap.POOLER_TENANT_ID.value | quote } }
+              value: {{ .Values.envMap.POOLER_TENANT_ID.value | quote }}
             - name: PORT
               value: '4000'
             - name: POSTGRES_DB
-              value: { { .Values.envMap.POSTGRES_DB.value | quote } }
+              value: {{ .Values.envMap.POSTGRES_DB.value | quote }}
             - name: POSTGRES_PASSWORD
-              value: { { .Values.envMap.POSTGRES_PASSWORD.value | quote } }
+              value: {{ .Values.envMap.POSTGRES_PASSWORD.value | quote }}
             - name: POSTGRES_PORT
-              value: { { .Values.envMap.POSTGRES_PORT.value | quote } }
+              value: {{ .Values.envMap.POSTGRES_PORT.value | quote }}
             - name: REGION
               value: local
             - name: SECRET_KEY_BASE
-              value: { { .Values.envMap.SECRET_KEY_BASE.value | quote } }
+              value: {{ .Values.envMap.SECRET_KEY_BASE.value | quote }}
             - name: VAULT_ENC_KEY
-              value: { { .Values.envMap.VAULT_ENC_KEY.value | quote } }
+              value: {{ .Values.envMap.VAULT_ENC_KEY.value | quote }}
           image: supabase/supavisor:2.5.7
           imagePullPolicy: IfNotPresent
           name: supabase-pooler

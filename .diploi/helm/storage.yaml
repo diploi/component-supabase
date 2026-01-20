@@ -29,9 +29,9 @@ spec:
       containers:
         - env:
             - name: ANON_KEY
-              value: { { .Values.envMap.ANON_KEY.value | quote } }
+              value: {{ .Values.envMap.ANON_KEY.value | quote }}
             - name: DATABASE_URL
-              value: 'postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}'
+              value: "postgres://supabase_storage_admin:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
             - name: ENABLE_IMAGE_TRANSFORMATION
               value: 'true'
             - name: FILE_SIZE_LIMIT
@@ -41,15 +41,15 @@ spec:
             - name: GLOBAL_S3_BUCKET
               value: stub
             - name: IMGPROXY_URL
-              value: 'http://imgproxy.{{ .Values.identifier }}:5001'
+              value: "http://imgproxy.{{ .Values.identifier }}:5001"
             - name: PGRST_JWT_SECRET
-              value: { { .Values.envMap.JWT_SECRET.value | quote } }
+              value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: POSTGREST_URL
-              value: { { .Values.envMap.REST_INTERNAL_URL.value | quote } }
+              value: {{ .Values.envMap.REST_INTERNAL_URL.value | quote }}
             - name: REGION
               value: stub
             - name: SERVICE_KEY
-              value: { { .Values.envMap.SERVICE_ROLE_KEY.value | quote } }
+              value: {{ .Values.envMap.SERVICE_ROLE_KEY.value | quote }}
             - name: STORAGE_BACKEND
               value: file
             - name: TENANT_ID
@@ -65,4 +65,4 @@ spec:
       volumes:
         - name: supabase-mount
           hostPath:
-            path: { { $.Values.storage.supabase.hostPath } }
+            path: {{ $.Values.storage.supabase.hostPath }}
