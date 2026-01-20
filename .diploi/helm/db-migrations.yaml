@@ -22,8 +22,8 @@ spec:
         - name: migration-state
           emptyDir: {}
       initContainers:
-        - name: db-readiness
-          image: supabase/postgres:15.8.1.085
+        - name: wait-for-db
+          image: {{ .Values.images.db }}
           imagePullPolicy: IfNotPresent
           env:
             - name: SUPABASE_DB_URL
@@ -54,7 +54,6 @@ spec:
 
               echo "$PRE_MIGRATION_TABLE_EXISTS" > /migration-state/pre_migration_table_exists
               echo "Recorded pre-migration table existence state: $PRE_MIGRATION_TABLE_EXISTS"
-      containers:
         - name: run-migrations
           image: {{ .Values.images.functions }}
           imagePullPolicy: IfNotPresent
@@ -92,14 +91,13 @@ spec:
               if [ "$PRE_MIGRATION_TABLE_EXISTS" = "1" ]; then
                 echo "Migrations already applied; skipping migrations and seed."
                 echo "0" >/migration-state/run_seed
-                echo "skip" >/migration-state/migration_status
                 exit 0
               fi
 {{- end }}
 
               if [ -d /home/deno/migrations ] && [ "$(ls -A /home/deno/migrations)" ]; then
                 echo "Applying Supabase migrations..."
-                supabase migration up --migration-dir /home/deno/migrations
+                (cd /home/deno && supabase migration up)
               else
                 echo "No migrations found, skipping."
               fi
@@ -117,9 +115,8 @@ spec:
               fi
 
               echo "$RUN_SEED_FLAG" >/migration-state/run_seed
-              echo "done" >/migration-state/migration_status
         - name: run-seed
-          image: supabase/postgres:15.8.1.085
+          image: {{ .Values.images.db }}
           imagePullPolicy: IfNotPresent
           env:
             - name: SUPABASE_DB_URL
@@ -139,12 +136,10 @@ spec:
             - |
               set -euo pipefail
 
-              echo "Awaiting migration completion signal..."
-              while [ ! -f /migration-state/run_seed ]; do
-                sleep 2
-              done
-
-              RUN_SEED_FLAG=$(tr -d '[:space:]' </migration-state/run_seed)
+              RUN_SEED_FLAG="0"
+              if [ -f /migration-state/run_seed ]; then
+                RUN_SEED_FLAG=$(tr -d '[:space:]' </migration-state/run_seed)
+              fi
 
               if [ "$RUN_SEED_FLAG" != "1" ]; then
                 echo "Seed execution not required; exiting."
@@ -159,3 +154,12 @@ spec:
               echo "Executing seed.sql via Postgres client..."
               psql "$SUPABASE_DB_URL" -f /migration-state/seed.sql
               echo "Seed execution complete."
+      containers:
+        - name: completion
+          image: {{ .Values.images.functions }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - bash
+            - -c
+            - |
+              echo "Supabase migrations handled by init containers; job complete."
