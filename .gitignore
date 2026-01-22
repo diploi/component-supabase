@@ -1,17 +1,26 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+# Proxy "supabase" symlink
+supabase
 
-# testing
-/coverage
+# Supabase local development state
+.temp/
+.branches/
+.cache/
+.postgres/
 
-# misc
+# Generated local config
+config.toml
+
+# Logs
+logs/
+*.log
+
+# Local environment overrides
+.env
+.env.local
+.env.*.local
+
+# Misc
 .DS_Store
 *.pem
-
-# local env files
-.env*.local
-
-# typescript
-*.tsbuildinfo

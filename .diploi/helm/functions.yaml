@@ -20,14 +20,189 @@ spec:
       imagePullSecrets:
         - name: diploi-pull-secret
       initContainers:
-        - name: wait-for-db
+        {{- if hasKey .Values.storage "code" }}
+        - name: ensure-supabase-folder
           image: busybox
           imagePullPolicy: IfNotPresent
+          env:
+            - name: APP_FOLDER
+              value: {{ .Values.folder | quote }}
+          volumeMounts:
+            - mountPath: /app
+              name: app-mount
           command:
-            - sh
+            - /bin/sh
+            - -eu
             - -c
             - |
-              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
+              set -eu
+
+              TARGET_DIR="/app${APP_FOLDER}"
+
+              case "${APP_FOLDER}" in
+                */supabase)
+                  echo "APP_FOLDER already ends with /supabase; skipping symlink creation."
+                  exit 0
+                  ;;
+              esac
+
+              mkdir -p "${TARGET_DIR}"
+              chown 1000:1000 "${TARGET_DIR}"
+              SYMLINK_PATH="${TARGET_DIR}/supabase"
+
+              if [ -L "${SYMLINK_PATH}" ]; then
+                echo "Symlink already present at ${SYMLINK_PATH}."
+                exit 0
+              fi
+
+              if [ -e "${SYMLINK_PATH}" ]; then
+                echo "Path ${SYMLINK_PATH} exists and is not a symlink; skipping to avoid overwrite."
+                exit 0
+              fi
+
+              ln -s "${TARGET_DIR}" "${SYMLINK_PATH}"
+              chown -h 1000:1000 "${SYMLINK_PATH}"
+              echo "Created symlink ${SYMLINK_PATH} -> ${TARGET_DIR}."
+        {{- end }}
+        - name: wait-for-db
+          image: supabase/postgres:15.8.1.085
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SUPABASE_DB_URL
+              value: "postgres://{{ .Values.envMap.POSTGRES_USER.value }}:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
+            - name: PGSSLMODE
+              value: disable
+          volumeMounts:
+            - name: migration-state
+              mountPath: /migration-state
+          command:
+            - bash
+            - -e
+            - -u
+            - -o
+            - pipefail
+            - -c
+            - |
+              set -euo pipefail
+
+              echo "Waiting for database to accept connections..."
+              until psql "$SUPABASE_DB_URL" -c "select 1;" >/dev/null 2>&1; do
+                echo "Database not ready yet, retrying in 2s..."
+                sleep 2
+              done
+
+              PRE_MIGRATION_TABLE_EXISTS=$(psql "$SUPABASE_DB_URL" -Atc "select count(*) from information_schema.tables where table_schema = 'supabase_migrations' and table_name = 'schema_migrations';" | tr -d '[:space:]')
+              PRE_MIGRATION_TABLE_EXISTS=${PRE_MIGRATION_TABLE_EXISTS:-0}
+
+              echo "$PRE_MIGRATION_TABLE_EXISTS" > /migration-state/pre_migration_table_exists
+              echo "Recorded pre-migration table existence state: $PRE_MIGRATION_TABLE_EXISTS"
+        - name: run-migrations
+          image: {{ .Values.images.functions }}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SUPABASE_DB_URL
+              value: "postgres://{{ .Values.envMap.POSTGRES_USER.value }}:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
+            - name: PGSSLMODE
+              value: disable
+            - name: SUPABASE_MIGRATIONS_DIR
+              value: "/home/deno/migrations"
+            - name: SUPABASE_DISABLE_TELEMETRY
+              value: "1"
+          volumeMounts:
+            - name: migration-state
+              mountPath: /migration-state
+            {{- if hasKey .Values.storage "code" }}
+            - mountPath: /home/deno/functions
+              name: functions-mount
+            - mountPath: /home/deno/supabase/migrations
+              name: migrations-mount
+            - mountPath: /home/deno/supabase/seed.sql
+              name: seed-mount
+            {{- end }}
+          command:
+            - bash
+            - -e
+            - -u
+            - -o
+            - pipefail
+            - -c
+            - |
+              set -euo pipefail
+
+              PRE_MIGRATION_TABLE_EXISTS=0
+              if [ -f /migration-state/pre_migration_table_exists ]; then
+                PRE_MIGRATION_TABLE_EXISTS=$(tr -d '[:space:]' </migration-state/pre_migration_table_exists)
+              fi
+              RUN_SEED_FLAG="0"
+
+{{- if eq .Values.stage "development" }}
+              echo "Development stage detected; checking for previously applied migrations..."
+              if [ "$PRE_MIGRATION_TABLE_EXISTS" = "1" ]; then
+                echo "Migrations already applied; skipping migrations and seed."
+                echo "0" >/migration-state/run_seed
+                exit 0
+              fi
+{{- end }}
+
+              if [ -d /home/deno/supabase/migrations ] && [ "$(ls -A /home/deno/supabase/migrations)" ]; then
+                echo "Applying Supabase migrations..."
+                (cd /home/deno && supabase migration up --db-url "$SUPABASE_DB_URL")
+              else
+                echo "No migrations found, skipping."
+              fi
+
+              if [ -f /home/deno/supabase/seed.sql ]; then
+                if [ "$PRE_MIGRATION_TABLE_EXISTS" != "1" ]; then
+                  echo "Flagging seed.sql for initial execution via DB image..."
+                  cp /home/deno/supabase/seed.sql /migration-state/seed.sql
+                  RUN_SEED_FLAG="1"
+                else
+                  echo "Migrations table already existed; skipping seed.sql."
+                fi
+              else
+                echo "No seed file present, skipping."
+              fi
+
+              echo "$RUN_SEED_FLAG" >/migration-state/run_seed
+        - name: run-seed
+          image: supabase/postgres:15.8.1.085
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SUPABASE_DB_URL
+              value: "postgres://{{ .Values.envMap.POSTGRES_USER.value }}:{{ .Values.envMap.POSTGRES_PASSWORD.value }}@{{ .Values.envMap.POSTGRES_HOST.value }}:{{ .Values.envMap.POSTGRES_PORT.value }}/{{ .Values.envMap.POSTGRES_DB.value }}"
+            - name: PGSSLMODE
+              value: disable
+          volumeMounts:
+            - name: migration-state
+              mountPath: /migration-state
+          command:
+            - bash
+            - -e
+            - -u
+            - -o
+            - pipefail
+            - -c
+            - |
+              set -euo pipefail
+
+              RUN_SEED_FLAG="0"
+              if [ -f /migration-state/run_seed ]; then
+                RUN_SEED_FLAG=$(tr -d '[:space:]' </migration-state/run_seed)
+              fi
+
+              if [ "$RUN_SEED_FLAG" != "1" ]; then
+                echo "Seed execution not required; exiting."
+                exit 0
+              fi
+
+              if [ ! -f /migration-state/seed.sql ]; then
+                echo "Seed file not provided; skipping."
+                exit 0
+              fi
+
+              echo "Executing seed.sql via Postgres client..."
+              psql "$SUPABASE_DB_URL" -f /migration-state/seed.sql
+              echo "Seed execution complete."
       containers:
         - args:
             - start
@@ -54,10 +229,29 @@ spec:
             {{- if hasKey .Values.storage "code" }}
             - mountPath: /home/deno/functions
               name: functions-mount
+            - mountPath: /home/deno/supabase/migrations
+              name: migrations-mount
+            - mountPath: /home/deno/supabase/seed.sql
+              name: seed-mount
             {{- end }}
       volumes:
+        - name: migration-state
+          emptyDir: {}
         {{- if hasKey .Values.storage "code" }}
         - name: functions-mount
           hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/functions"
+            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/functions"
+            type: DirectoryOrCreate
+        - name: migrations-mount
+          hostPath:
+            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/migrations"
+            type: DirectoryOrCreate
+        - name: seed-mount
+          hostPath:
+            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/seed.sql"
+            type: FileOrCreate
+        - name: app-mount
+          hostPath:
+            path: "{{ .Values.storage.code.hostPath }}"
+            type: Directory
         {{- end }}

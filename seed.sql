@@ -1,0 +1,2 @@
+-- This file can be used to seed data in your Supabase DB
+-- See https://supabase.com/docs/guides/deployment/database-migrations for more information

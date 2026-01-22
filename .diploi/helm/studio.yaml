@@ -23,7 +23,7 @@ spec:
             - sh
             - -c
             - |
-              until nc -z {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
+              until nc -z -w 2 {{ .Values.envMap.POSTGRES_HOST.value }} {{ .Values.envMap.POSTGRES_PORT.value }}; do echo waiting for db; sleep 1; done;
       containers:
         - env:
             - name: AUTH_JWT_SECRET

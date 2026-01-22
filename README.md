@@ -12,13 +12,13 @@ Based on the official [supabase/docker](https://github.com/supabase/supabase/tre
 
 ## Operation
 
-A full Supabase implementation.
+A full Supabase self-hosted implementation.
 
 ### Limitations
 
 We know of a few limitations that currently exist with Supabase on Diploi. We are actively working on fixes.
-- Connection URI's dislayed on Supabase Studio are wrong, please use the ones on Diploi Console
-- Logs view on Supabase Studio is empty, please use the logging functionality built-in to Diploi
+
+- Connection URI's displayed on Supabase Studio are wrong, please use the ones on Diploi Console
 
 ### Authentication
 
@@ -29,8 +29,29 @@ You can find the admin credentials from a deployments "Options" tab in the Diplo
 
 ### Development
 
+#### Functions
+
 You can develop custom functions with [Deno](https://deno.com/).
-We will create a `/functions` directory for you with a preconfigured `main` function and an example `hello` function.
+Diploi automatically creates a `/functions` directory for you with a preconfigured `main` function and an example `hello` function.
+
+#### Migrations
+
+Database migrations and seeding are supported.
+
+Diploi automatically creates a `/migrations` directory and a `seed.sql` file for you.
+They work with the Supabase CLI to manage schema changes and database seeding in a repeatable way.
+
+If the component folder is not named `supabase`, Diploi creates a `supabase` symlink inside it so the Supabase CLI works as expected.
+
+For guidance and best practices, see the [official Supabase docs on database migrations](https://supabase.com/docs/guides/deployment/database-migrations).
+
+> [!IMPORTANT]  
+> Migrations are run automatically in **staging** and **production** deployments.
+> In **development**, use the Supabase CLI to create and run migrations.
+
+> [!IMPORTANT]  
+> If your Supabase component is located in a folder named `supabase`, you can run CLI commands directly from the `/app` directory.
+> Otherwise, navigate to the component's folder before running any CLI commands.
 
 ## Links
 
@@ -38,3 +59,4 @@ We will create a `/functions` directory for you with a preconfigured `main` func
 - [Supabase documentation](https://supabase.com/docs)
 - [Self-Hosting Supabase with Docker](https://supabase.com/docs/guides/self-hosting/docker)
 - [Generate Supabase API keys](https://supabase.com/docs/guides/self-hosting/docker#generate-api-keys)
+- [Migrations with Supabase CLI](https://supabase.com/docs/guides/deployment/database-migrations)

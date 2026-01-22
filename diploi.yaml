@@ -3,7 +3,7 @@ type: component
 name: Supabase
 description: Official Diploi component for Supabase
 
-defaultContainer: supabase-studio
+defaultContainer: supabase-functions
 
 hosts:
   - name: Supabase
@@ -15,7 +15,7 @@ connectionStrings:
   - name: Internal Address
     value: http://kong.${DIPLOI_NAMESPACE}:8000
   - name: PostgreSQL Connection URI
-    value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable
 
 parameterGroups:
   - name: Dashboard
