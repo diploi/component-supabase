@@ -29,7 +29,7 @@ spec:
               value: {{ .Values.folder | quote }}
           volumeMounts:
             - mountPath: /app
-              name: folder-mount
+              name: app-mount
           command:
             - /bin/sh
             - -eu
@@ -37,21 +37,18 @@ spec:
             - |
               set -eu
 
-              APP_FOLDER_STRIPPED=${APP_FOLDER%/}
+              TARGET_DIR="/app${APP_FOLDER}"
 
-              case "${APP_FOLDER_STRIPPED}" in
+              case "${APP_FOLDER}" in
                 */supabase)
                   echo "APP_FOLDER already ends with /supabase; skipping symlink creation."
                   exit 0
                   ;;
               esac
 
-              APP_FOLDER_REL=${APP_FOLDER_STRIPPED#/}
-              TARGET_DIR="/app/${APP_FOLDER_REL}"
-              SYMLINK_PATH="${TARGET_DIR}/supabase"
-
               mkdir -p "${TARGET_DIR}"
               chown 1000:1000 "${TARGET_DIR}"
+              SYMLINK_PATH="${TARGET_DIR}/supabase"
 
               if [ -L "${SYMLINK_PATH}" ]; then
                 echo "Symlink already present at ${SYMLINK_PATH}."
@@ -253,8 +250,8 @@ spec:
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/seed.sql"
             type: File
-        - name: folder-mount
+        - name: app-mount
           hostPath:
-            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}"
+            path: "{{ .Values.storage.code.hostPath }}"
             type: Directory
         {{- end }}
