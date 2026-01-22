@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Proxy "supabase" folder
-supabase/
+# Proxy "supabase" symlink
+supabase
 
 # Supabase local development state
 .temp/

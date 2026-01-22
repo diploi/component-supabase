@@ -41,6 +41,8 @@ Database migrations and seeding are supported.
 Diploi automatically creates a `/migrations` directory and a `seed.sql` file for you.
 They work with the Supabase CLI to manage schema changes and database seeding in a repeatable way.
 
+If the component folder is not named `supabase`, Diploi creates a `supabase` symlink inside it so the Supabase CLI works as expected.
+
 For guidance and best practices, see the [official Supabase docs on database migrations](https://supabase.com/docs/guides/deployment/database-migrations).
 
 > [!IMPORTANT]  

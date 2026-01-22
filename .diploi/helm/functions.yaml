@@ -241,15 +241,15 @@ spec:
         - name: functions-mount
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/functions"
-            type: Directory
+            type: DirectoryOrCreate
         - name: migrations-mount
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/migrations"
-            type: Directory
+            type: DirectoryOrCreate
         - name: seed-mount
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/seed.sql"
-            type: File
+            type: FileOrCreate
         - name: app-mount
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}"
