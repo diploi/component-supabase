@@ -37,17 +37,21 @@ spec:
             - |
               set -eu
 
-              TARGET_DIR="/app${APP_FOLDER}"
+              APP_FOLDER_STRIPPED=${APP_FOLDER%/}
 
-              case "${APP_FOLDER}" in
+              case "${APP_FOLDER_STRIPPED}" in
                 */supabase)
                   echo "APP_FOLDER already ends with /supabase; skipping symlink creation."
                   exit 0
                   ;;
               esac
 
-              mkdir -p "${TARGET_DIR}"
+              APP_FOLDER_REL=${APP_FOLDER_STRIPPED#/}
+              TARGET_DIR="/app/${APP_FOLDER_REL}"
               SYMLINK_PATH="${TARGET_DIR}/supabase"
+
+              mkdir -p "${TARGET_DIR}"
+              chown 1000:1000 "${TARGET_DIR}"
 
               if [ -L "${SYMLINK_PATH}" ]; then
                 echo "Symlink already present at ${SYMLINK_PATH}."
@@ -60,6 +64,7 @@ spec:
               fi
 
               ln -s "${TARGET_DIR}" "${SYMLINK_PATH}"
+              chown -h 1000:1000 "${SYMLINK_PATH}"
               echo "Created symlink ${SYMLINK_PATH} -> ${TARGET_DIR}."
         {{- end }}
         - name: wait-for-db

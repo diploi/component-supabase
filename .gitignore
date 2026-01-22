@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Proxy "supabase" folder
+supabase/
+
 # Supabase local development state
 .temp/
 .branches/
@@ -17,7 +20,6 @@ logs/
 .env
 .env.local
 .env.*.local
-
 
 # Misc
 .DS_Store
