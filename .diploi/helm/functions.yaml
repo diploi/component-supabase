@@ -20,12 +20,16 @@ spec:
       imagePullSecrets:
         - name: diploi-pull-secret
       initContainers:
+        {{- if hasKey .Values.storage "code" }}
         - name: ensure-supabase-folder
           image: busybox
           imagePullPolicy: IfNotPresent
           env:
             - name: APP_FOLDER
               value: {{ .Values.folder | quote }}
+          volumeMounts:
+            - mountPath: /app
+              name: folder-mount
           command:
             - /bin/sh
             - -eu
@@ -57,6 +61,7 @@ spec:
 
               ln -s "${TARGET_DIR}" "${SYMLINK_PATH}"
               echo "Created symlink ${SYMLINK_PATH} -> ${TARGET_DIR}."
+        {{- end }}
         - name: wait-for-db
           image: supabase/postgres:15.8.1.085
           imagePullPolicy: IfNotPresent
@@ -243,4 +248,8 @@ spec:
           hostPath:
             path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/seed.sql"
             type: File
+        - name: folder-mount
+          hostPath:
+            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}"
+            type: Directory
         {{- end }}
