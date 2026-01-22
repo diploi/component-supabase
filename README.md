@@ -47,6 +47,10 @@ For guidance and best practices, see the [official Supabase docs on database mig
 > Migrations are run automatically in **staging** and **production** deployments.
 > In **development**, use the Supabase CLI to create and run migrations.
 
+> [!IMPORTANT]  
+> If your Supabase component is located in a folder named `supabase`, you can run CLI commands directly from the `/app` directory.
+> Otherwise, navigate to the component's folder before running any CLI commands.
+
 ## Links
 
 - [Adding Supabase to a project](https://docs.diploi.com/building/components/supabase)

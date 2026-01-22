@@ -14,6 +14,10 @@ For guidance and best practices, see the [official Supabase docs on database mig
 Migrations and the `seed.sql` file apply automatically only when you create a new development deployment.
 Use the Supabase CLI to apply any future migrations.
 
+> [!IMPORTANT]  
+> If your Supabase component is located in a folder named `supabase`, you can run CLI commands directly from the `/app` directory.
+> Otherwise, navigate to the component's folder before running any CLI commands.
+
 #### Add migrations using the Supabase CLI:
 
 1. Open an SSH connection (or a terminal in your IDE) to the deployment

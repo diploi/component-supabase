@@ -20,6 +20,43 @@ spec:
       imagePullSecrets:
         - name: diploi-pull-secret
       initContainers:
+        - name: ensure-supabase-folder
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: APP_FOLDER
+              value: {{ .Values.folder | quote }}
+          command:
+            - /bin/sh
+            - -eu
+            - -c
+            - |
+              set -eu
+
+              TARGET_DIR="/app${APP_FOLDER}"
+
+              case "${APP_FOLDER}" in
+                */supabase)
+                  echo "APP_FOLDER already ends with /supabase; skipping symlink creation."
+                  exit 0
+                  ;;
+              esac
+
+              mkdir -p "${TARGET_DIR}"
+              SYMLINK_PATH="${TARGET_DIR}/supabase"
+
+              if [ -L "${SYMLINK_PATH}" ]; then
+                echo "Symlink already present at ${SYMLINK_PATH}."
+                exit 0
+              fi
+
+              if [ -e "${SYMLINK_PATH}" ]; then
+                echo "Path ${SYMLINK_PATH} exists and is not a symlink; skipping to avoid overwrite."
+                exit 0
+              fi
+
+              ln -s "${TARGET_DIR}" "${SYMLINK_PATH}"
+              echo "Created symlink ${SYMLINK_PATH} -> ${TARGET_DIR}."
         - name: wait-for-db
           image: supabase/postgres:15.8.1.085
           imagePullPolicy: IfNotPresent
@@ -196,14 +233,14 @@ spec:
         {{- if hasKey .Values.storage "code" }}
         - name: functions-mount
           hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/supabase/functions"
+            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/functions"
             type: Directory
         - name: migrations-mount
           hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/supabase/migrations"
+            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/migrations"
             type: Directory
         - name: seed-mount
           hostPath:
-            path: "{{ .Values.storage.code.hostPath }}/{{ .Values.identifier }}/supabase/seed.sql"
+            path: "{{ .Values.storage.code.hostPath }}{{ .Values.folder }}/seed.sql"
             type: File
         {{- end }}

@@ -20,9 +20,9 @@ COPY . /app
 
 # Copy the Supabase /functions, /migrations and seed.sql over to the correct locations
 RUN mkdir -p /home/deno/functions /home/deno/supabase/migrations \
- && if [ -d "${FOLDER}/supabase/functions" ]; then cp --verbose -R "${FOLDER}/supabase/functions/." /home/deno/functions; fi \
- && if [ -d "${FOLDER}/supabase/migrations" ]; then cp --verbose -R "${FOLDER}/supabase/migrations/." /home/deno/supabase/migrations; fi \
- && if [ -f "${FOLDER}/supabase/seed.sql" ]; then cp --verbose "${FOLDER}/supabase/seed.sql" /home/deno/supabase/seed.sql; fi
+ && if [ -d "${FOLDER}/functions" ]; then cp --verbose -R "${FOLDER}/functions/." /home/deno/functions; fi \
+ && if [ -d "${FOLDER}/migrations" ]; then cp --verbose -R "${FOLDER}/migrations/." /home/deno/supabase/migrations; fi \
+ && if [ -f "${FOLDER}/seed.sql" ]; then cp --verbose "${FOLDER}/seed.sql" /home/deno/supabase/seed.sql; fi
 
 RUN chown -R 1000:1000 /home/deno
 RUN rm -rf /app
