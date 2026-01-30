@@ -38,39 +38,39 @@ parameterGroups:
         identifier: STUDIO_DEFAULT_PROJECT
         defaultValue: Default Project
         type: string
-  - name: Email
+  - name: Custom Email
     identifier: email
-    description: Configure SMTP to send emails
+    description: Configure custom SMTP settings to send emails
     toggleable: true
     defaultValue: false
     parameters:
       - name: SMTP Admin Email
         identifier: SMTP_ADMIN_EMAIL
-        defaultValue: admin@example.com
+        defaultValue: ''
         type: string
       - name: SMTP Host
         identifier: SMTP_HOST
-        defaultValue: supabase-mail
+        defaultValue: core.diploi
         type: string
       - name: SMTP Port
         identifier: SMTP_PORT
-        defaultValue: 2500
+        defaultValue: 2525
         type: integer
       - name: SMTP User
         identifier: SMTP_USER
-        defaultValue: fake_mail_user
+        defaultValue: ''
         type: string
       - name: SMTP Pass
         identifier: SMTP_PASS
-        defaultValue: fake_mail_password
+        defaultValue: ''
         type: string
       - name: SMTP Sender Name
         identifier: SMTP_SENDER_NAME
-        defaultValue: fake_sender
+        defaultValue: 'Supabase'
         type: string
       - name: Enable Email Sign Up
         identifier: ENABLE_EMAIL_SIGNUP
-        defaultValue: false
+        defaultValue: true
         type: boolean
       - name: Enable Email Automatic Confirmation
         identifier: ENABLE_EMAIL_AUTOCONFIRM
