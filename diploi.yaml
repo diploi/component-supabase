@@ -38,7 +38,7 @@ parameterGroups:
         identifier: STUDIO_DEFAULT_PROJECT
         defaultValue: Default Project
         type: string
-  - name: Custom Email
+  - name: Custom SMTP Settings
     identifier: email
     description: Configure custom SMTP settings to send emails
     toggleable: true
