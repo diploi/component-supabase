@@ -50,6 +50,7 @@ parameterGroups:
         type: string
       - name: SMTP Host
         identifier: SMTP_HOST
+        description: An SMTP server (core.diploi) is available within your deployment, see https://docs.diploi.com/reference/built-in-email
         defaultValue: core.diploi
         type: string
       - name: SMTP Port
