@@ -85,7 +85,7 @@ spec:
             {{- else }}
             # Diploi provided SMTP settings
             - name: GOTRUE_SMTP_ADMIN_EMAIL
-              value: ""
+              value: "admin@example.com"
             - name: GOTRUE_SMTP_HOST
               value: core.diploi
             - name: GOTRUE_SMTP_PASS
@@ -93,7 +93,7 @@ spec:
             - name: GOTRUE_SMTP_PORT
               value: "2525"
             - name: GOTRUE_SMTP_SENDER_NAME
-              value: "Supabase"
+              value: ""
             - name: GOTRUE_SMTP_USER
               value: ""
             {{- end }}

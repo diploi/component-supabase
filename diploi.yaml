@@ -46,7 +46,7 @@ parameterGroups:
     parameters:
       - name: SMTP Admin Email
         identifier: SMTP_ADMIN_EMAIL
-        defaultValue: ''
+        defaultValue: 'admin@example.com'
         type: string
       - name: SMTP Host
         identifier: SMTP_HOST
@@ -67,7 +67,7 @@ parameterGroups:
         type: string
       - name: SMTP Sender Name
         identifier: SMTP_SENDER_NAME
-        defaultValue: 'Supabase'
+        defaultValue: ''
         type: string
       - name: Enable Email Sign Up
         identifier: ENABLE_EMAIL_SIGNUP
