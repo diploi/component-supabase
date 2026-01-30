@@ -68,6 +68,8 @@ spec:
               value: {{ .Values.envMap.SITE_URL.value | quote }}
             - name: GOTRUE_SMS_AUTOCONFIRM
               value: {{ .Values.envMap.ENABLE_PHONE_AUTOCONFIRM.value | quote }}
+            {{- if .Values.parameterGroupsEnabled.email }}
+            # User configured custom SMTP settings
             - name: GOTRUE_SMTP_ADMIN_EMAIL
               value: {{ .Values.envMap.SMTP_ADMIN_EMAIL.value | quote }}
             - name: GOTRUE_SMTP_HOST
@@ -80,6 +82,21 @@ spec:
               value: {{ .Values.envMap.SMTP_SENDER_NAME.value | quote }}
             - name: GOTRUE_SMTP_USER
               value: {{ .Values.envMap.SMTP_USER.value | quote }}
+            {{- else }}
+            # Diploi provided SMTP settings
+            - name: GOTRUE_SMTP_ADMIN_EMAIL
+              value: "admin@example.com"
+            - name: GOTRUE_SMTP_HOST
+              value: core.diploi
+            - name: GOTRUE_SMTP_PASS
+              value: ""
+            - name: GOTRUE_SMTP_PORT
+              value: "2525"
+            - name: GOTRUE_SMTP_SENDER_NAME
+              value: ""
+            - name: GOTRUE_SMTP_USER
+              value: ""
+            {{- end }}
             - name: GOTRUE_URI_ALLOW_LIST
               value: {{ .Values.envMap.ADDITIONAL_REDIRECT_URLS.value | quote }}
           image: supabase/gotrue:v2.185.0
