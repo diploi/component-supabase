@@ -231,6 +231,8 @@ environmentVariables:
     defaultValue: 3600
   - identifier: PGRST_DB_SCHEMAS
     defaultValue: public,storage,graphql_public
+  - identifier: REALTIME_TENANT_NAME
+    defaultValue: realtime
   - identifier: ADDITIONAL_REDIRECT_URLS
     defaultValue: ''
 
