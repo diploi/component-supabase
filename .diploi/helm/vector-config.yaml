@@ -36,6 +36,7 @@ data:
           - kubernetes_unwrap
         source: |-
           .project = "default"
+          .metadata.project_ref = .project
           .event_message = del(.message)
           .appname = del(.kubernetes.container_name)
           del(.file)
@@ -128,8 +129,9 @@ data:
         inputs:
           - router.realtime
         source: |-
-          .metadata.project = del(.project)
-          .metadata.external_id = .metadata.project
+          .metadata.project = .project
+          .metadata.external_id = .project
+          del(.project)
           parsed, err = parse_regex(.event_message, r'^(?P<time>\d+:\d+:\d+\.\d+) \[(?P<level>\w+)\] (?P<msg>.*)$')
           if err == null {
               .event_message = parsed.msg
@@ -141,8 +143,9 @@ data:
         inputs:
           - router.storage
         source: |-
-          .metadata.project = del(.project)
-          .metadata.tenantId = .metadata.project
+          .metadata.project = .project
+          .metadata.tenantId = .project
+          del(.project)
           parsed, err = parse_json(.event_message)
           if err == null {
               .event_message = parsed.msg
@@ -179,7 +182,8 @@ data:
         inputs:
           - router.functions
         source: |-
-          .metadata.project_ref = del(.project)
+          .metadata.project_ref = .project
+          del(.project)
 
     sinks:
       debug_console:

@@ -54,8 +54,17 @@ spec:
               value: {{ .Values.envMap.SERVICE_ROLE_KEY.value | quote }}
             - name: SUPABASE_URL
               value: {{ .Values.envMap.KONG_INTERNAL_URL.value | quote }}
-          image: supabase/studio:2026.01.12-sha-4e9b718
+            - name: SNIPPETS_MANAGEMENT_FOLDER
+              value: /var/lib/storage/snippets
+          image: supabase/studio:2026.02.02-sha-b0b7db6
           imagePullPolicy: IfNotPresent
           name: supabase-studio
           ports:
             - containerPort: 3000
+          volumeMounts:
+            - mountPath: /var/lib/storage
+              name: supabase-mount
+      volumes:
+        - name: supabase-mount
+          hostPath:
+            path: {{ $.Values.storage.supabase.hostPath }}
