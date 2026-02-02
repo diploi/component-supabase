@@ -29,7 +29,7 @@ spec:
             - name: API_JWT_SECRET
               value: {{ .Values.envMap.JWT_SECRET.value | quote }}
             - name: APP_NAME
-              value: realtime
+              value: {{ .Values.envMap.REALTIME_TENANT_NAME.value | quote }}
             - name: DB_AFTER_CONNECT_QUERY
               value: 'SET search_path TO _realtime'
             - name: DB_ENC_KEY
@@ -58,6 +58,8 @@ spec:
               value: {{ .Values.envMap.SECRET_KEY_BASE.value | quote }}
             - name: SEED_SELF_HOST
               value: 'true'
+            - name: SELF_HOST_TENANT_NAME
+              value: {{ .Values.envMap.REALTIME_TENANT_NAME.value | quote }}
           image: supabase/realtime:v2.63.0
           imagePullPolicy: IfNotPresent
           name: supabase-realtime
