@@ -35,7 +35,7 @@ data:
         inputs:
           - kubernetes_unwrap
         source: |-
-          .project = "{{ .Release.Namespace }}"
+          .project = "default"
           .metadata.project_ref = .project
           .event_message = del(.message)
           .appname = del(.kubernetes.container_name)
