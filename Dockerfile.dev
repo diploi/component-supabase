@@ -1,12 +1,12 @@
 # This Dockerfile will build the "functions" image for Supabase with the /functions folder code baked in
 
-FROM supabase/edge-runtime:v1.67.4
+FROM supabase/edge-runtime:v1.70.1
 
 # This will be set by the GitHub action to the folder containing this component
 ARG FOLDER=/app
 
 # Install Supabase CLI
-ARG SUPABASE_CLI_VERSION=2.72.7
+ARG SUPABASE_CLI_VERSION=2.75.0
 RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates curl \
  && curl -fLO https://github.com/supabase/cli/releases/download/v${SUPABASE_CLI_VERSION}/supabase_${SUPABASE_CLI_VERSION}_linux_arm64.deb \
