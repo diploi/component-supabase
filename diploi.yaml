@@ -238,7 +238,7 @@ environmentVariables:
 
 images:
   - identifier: functions
-    prebuildImage: ghcr.io/diploi/component-supabase:[tag]
+    prebuildImage: public.ecr.aws/p8t2q7f4/diploi/component-supabase:[tag]
 
 storage:
   - identifier: supabase
