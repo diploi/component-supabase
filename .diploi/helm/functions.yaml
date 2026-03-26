@@ -221,6 +221,10 @@ spec:
               value: {{ .Values.envMap.KONG_INTERNAL_URL.value | quote }}
             - name: VERIFY_JWT
               value: {{ .Values.envMap.FUNCTIONS_VERIFY_JWT.value | quote }}
+            {{- range .Values.env }}
+            - name: {{ .identifier }}
+              value: {{ .value | quote }}
+            {{- end }}
           image: {{ .Values.images.functions }}
           name: supabase-functions
           ports:
