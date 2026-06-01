@@ -20,16 +20,16 @@ Use the Supabase CLI to apply any future migrations.
 
 #### Add migrations using the Supabase CLI:
 
-1. Open an SSH connection (or a terminal in your IDE) to the deployment
+1. Open your deployment in the Diploi Dashboard, then connect to it over SSH using "Connect via SSH". Alternatively, open a terminal in your IDE if it is already connected to the deployment over SSH.
 2. Navigate to your Supabase components folder (`cd supabase`)
 3. Run `supabase migration new <migration name>`
 
 #### Run migrations using the Supabase CLI:
 
 1. Open the Diploi Dashboard and copy the "PostgreSQL Connection URI" for your Supabase component
-2. Open an SSH connection (or a terminal in your IDE) to the deployment
+2. Connect to it over SSH using "Connect via SSH" in the Diploi Dashboard. Alternatively, open a terminal in your IDE if it is already connected to the deployment over SSH.
 3. Navigate to your Supabase components folder (`cd supabase`)
-4. Run `supabase migration up --db-url "<the url you copied for postgres>"`
+4. Run `PGSSLMODE=disable supabase migration up --db-url "<the url you copied for postgres>"`
 
 ## Staging & Production
 
